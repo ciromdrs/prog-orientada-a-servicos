@@ -20,3 +20,7 @@ def expect_status_code(response: requests.Response, code:int) -> (bool, str):
         return False, errmsg
     return True, ''
 
+
+# Testes
+# GET /
+test('GET /', requests.get, ['http://localhost'], expect_status_code, [200])
