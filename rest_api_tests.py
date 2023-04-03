@@ -1,5 +1,7 @@
 '''Testes automáticos para APIs REST desenvolvidas na disciplina "Programação
-Orientada a Serviços".'''
+Orientada a Serviços".
+
+Requer o módulo `requests` instalado.'''
 
 import requests
 
@@ -13,6 +15,7 @@ def test(description, req_method, req_args, expectation, exp_args):
 
 def expect_status_code(response: requests.Response, code:int) -> (bool, str):
     if response.status_code != code:
-        return False, f"Esperava status code {code}, recebeu {response.status_code}"
+        errmsg = f"Esperava status code {code}, recebeu {response.status_code}"
+        return False, errmsg
     return True, ''
 
