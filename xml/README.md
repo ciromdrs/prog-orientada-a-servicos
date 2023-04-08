@@ -1,5 +1,5 @@
 # XML
-XML significa eXtensivle Markup Language.
+XML significa eXtensible Markup Language.
 A maioria das linguagens de programação já vem com bibliotecas para tratar dados XML.
 
 ## Sintaxe resumida
