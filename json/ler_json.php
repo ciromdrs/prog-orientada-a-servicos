@@ -6,6 +6,7 @@ https://jsonlint.com/ para corrigí-los.
 
 if (sizeof($argv) != 2) {
     echo "Uso: {$argv[0]} arquivo.json\n";
+    exit(1);
 }
 
 $arquivo = fopen($argv[1], "r");
