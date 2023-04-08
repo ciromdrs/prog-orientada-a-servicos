@@ -1,5 +1,8 @@
 # JSON
-Sintaxe resumida do JSON:
+JSON significa JavaScript Object Notation.
+Porém JSON não tem nenhuma relação de exclusividade com JavaScript, a maioria das linguagens de programação já vem com bibliotecas para tratar dados JSON.
+
+## Sintaxe resumida
 * Valores simples por si só são elementos JSON:
     * O número `42`.
     * A string `"hello"`.
