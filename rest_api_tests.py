@@ -4,7 +4,7 @@ Orientada a Serviços".
 Requer o módulo `requests` instalado.
 
 Uso: python <nome-deste-script.py> <endereco-do-servidor>
-Exemplo: python rest_api_tests.property "http://localhost:80"'''
+Exemplo: python rest_api_tests.py "http://localhost:80"'''
 
 import sys
 import requests
