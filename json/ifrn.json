@@ -12,11 +12,5 @@
                 "cidade" : "Natal"
             }
         }
-    ],
-    "estatisticas" : {
-        "data_consulta" : "2023-04-08T10:24:23+0000",
-        "cursos" : 147,
-        "estudantes" : 24390,
-        "servidores" : 2642
-    }
+    ]
 }

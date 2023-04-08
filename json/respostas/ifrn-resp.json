@@ -1,0 +1,32 @@
+{
+    "nome" : "Instituto Federal de Educação, Ciência e Tecnologia do Rio Grande do Norte",
+    "sigla" : "IFRN",
+    "campi" : [
+        {
+            "nome" : "Campus Natal",
+            "endereco" : {
+                "logradouro" : "Rua Dr. Nilo Bezerra Ramalho",
+                "numero" : "1692",
+                "bairro" : "Tirol",
+                "cep" : "59015-300",
+                "cidade" : "Natal"
+            }
+        },
+        {
+            "nome" : "Campus Caicó",
+            "endereco" : {
+                "logradouro" : "Rodovia RN 288",
+                "numero" : "s/n",
+                "bairro" : "Nova Caicó",
+                "cep" : "59300-000",
+                "cidade" : "Caicó"
+            }
+        }
+    ],
+    "estatisticas" : {
+        "data_consulta" : "2023-04-08T10:24:23+0000",
+        "cursos" : 147,
+        "estudantes" : 24390,
+        "servidores" : 2642
+    }
+}
