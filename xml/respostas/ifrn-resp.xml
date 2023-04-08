@@ -16,7 +16,7 @@
 
         <campus>
             <nome>Campus Caicó</nome>
-            <endereco> : {
+            <endereco>
                 <logradouro>Rodovia RN 288</logradouro>
                 <numero>s/n</numero>
                 <bairro>Nova Caicó</bairro>
