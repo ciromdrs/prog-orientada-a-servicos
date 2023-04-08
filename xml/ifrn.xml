@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<instituicao>
+    <nome>Instituto Federal de Educação, Ciência e Tecnologia do Rio Grande do Norte</nome>
+    <sigla>IFRN</sigla>
+    <campi>
+        <campus>
+            <nome>Campus Natal</nome>
+            <endereco>
+                <logradouro>Rua Dr. Nilo Bezerra Ramalho</logradouro>
+                <numero>1692</numero>
+                <bairro>Tirol</bairro>
+                <cep>59015-300</cep>
+                <cidade>Natal</cidade>
+            </endereco>
+        </campus>
+    </campi>
+</instituicao>

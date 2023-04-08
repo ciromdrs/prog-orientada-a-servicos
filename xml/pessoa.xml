@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pessoa>
+    <nome>Alice</nome>
+    <idade>60</idade>
+    <altura>1.72</altura>
+</pessoa>
