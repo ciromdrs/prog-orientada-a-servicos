@@ -9,8 +9,7 @@ if (sizeof($argv) != 2) {
     exit(1);
 }
 
-$arquivo = fopen($argv[1], "r");
-$conteudo = stream_get_contents($arquivo);
+$conteudo = file_get_contents($argv[1]);
 $meu_array = json_decode($conteudo,
                          $associative = true, // Retorna um array em vez de um
                                               // objeto padrão.
