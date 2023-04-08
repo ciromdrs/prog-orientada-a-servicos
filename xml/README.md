@@ -1,4 +1,6 @@
 # XML
+XML significa eXtensivle Markup Language.
+A maioria das linguagens de programação já vem com bibliotecas para tratar dados XML.
 
 ## Sintaxe resumida
 Todo documento XML é uma árvore, que deve ter um elemento raiz.
@@ -63,5 +65,5 @@ valor de qualquer arquivo XML.
     Em qual parte do arquivo você colocará esses valores? Como os representará?
 
     3. Visto que esses dados mudarão no futuro, adicione onde achar adequado um elemento `data_consulta` contendo o timestamp do momento em que você consultou esses dados.
-    O timestamp deve estar no formato ISO 8601.
+    É preferível usar o formato ISO 8601 para o timestamp.
     Você pode encontrar o timestamp atual nesse formato na internet.
