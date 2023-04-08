@@ -1,0 +1,22 @@
+{
+    "nome" : "Instituto Federal de Educação, Ciência e Tecnologia do Rio Grande do Norte",
+    "sigla" : "IFRN",
+    "campi" : [
+        {
+            "nome" : "Campus Natal",
+            "endereco" : {
+                "logradouro" : "Rua Dr. Nilo Bezerra Ramalho",
+                "numero" : "1692",
+                "bairro" : "Tirol",
+                "cep" : "59015-300",
+                "cidade" : "Natal"
+            }
+        }
+    ],
+    "estatisticas" : {
+        "data_consulta" : "2023-04-08T10:24:23+0000",
+        "cursos" : 147,
+        "estudantes" : 24390,
+        "servidores" : 2642
+    }
+}

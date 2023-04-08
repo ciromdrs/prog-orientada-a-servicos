@@ -1,0 +1,11 @@
+{
+    "nome" : "Ciro",
+    "idade" : 29,
+    "peso" : 76.5,
+    "dependentes" : [],
+    "matricula" : null,
+    "aqui" : {
+        "tambem" : "podemos",
+        "incluir" : "outros objetos."
+    }
+}
