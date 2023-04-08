@@ -26,6 +26,14 @@ valor de qualquer arquivo JSON.
 Perceba que cada arquivo exemplo é um documento JSON válido.
 
 ## Exercícios
-1 - Use o script `ler_json.php` para ler o conteúdo de cada arquivo.
+1. Use o script `ler_json.php` para ler o conteúdo de cada arquivo.
 
-2 - Altere o arquivo `ifrn.json` adicionando os dados do Campus Caicó.
+2. Altere o arquivo `ifrn.json`:
+    1. Adicione os dados do Campus Caicó.
+
+    2. Abra a [página do IFRN](https://portal.ifrn.edu.br/), vá até a seção "IFRN em números" e copie esses valores para dentro do seu arquivo JSON.
+    Em qual parte do arquivo você colocará esses valores? Como os representará?
+
+    3. Visto que esses dados mudarão no futuro, adicione onde achar adequado uma chave `data_consulta` contendo o timestamp do momento em que você consultou esses dados.
+    O timestamp deve estar no formato ISO 8601.
+    Você pode encontrar o timestamp atual nesse formato na internet.
