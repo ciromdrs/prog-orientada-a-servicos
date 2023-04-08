@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<instituicao>
+    <nome>Instituto Federal de Educação, Ciência e Tecnologia do Rio Grande do Norte</nome>
+    <sigla>IFRN</sigla>
+    <campi>
+        <campus>
+            <nome>Campus Natal</nome>
+            <endereco>
+                <logradouro>Rua Dr. Nilo Bezerra Ramalho</logradouro>
+                <numero>1692</numero>
+                <bairro>Tirol</bairro>
+                <cep>59015-300</cep>
+                <cidade>Natal</cidade>
+            </endereco>
+        </campus>
+
+        <campus>
+            <nome>Campus Caicó</nome>
+            <endereco> : {
+                <logradouro>Rodovia RN 288</logradouro>
+                <numero>s/n</numero>
+                <bairro>Nova Caicó</bairro>
+                <cep>59300-000</cep>
+                <cidade>Caicó</cidade>
+            </endereco>
+        </campus>
+    </campi>
+
+    <estatisticas>
+        <data_consulta>2023-04-08T10:24:23+0000</data_consulta>
+        <cursos>147</cursos>
+        <estudantes>24390</estudantes>
+        <servidores>2642</servidores>
+    </estatisticas>
+</instituicao>
