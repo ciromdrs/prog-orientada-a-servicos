@@ -12,12 +12,16 @@ Sintaxe resumida do JSON:
     * Use `{` e `}` para definir um objeto e inclua pares `"chave" : valor` separados por `,`, onde `"chave"` é necessariamente uma string e `valor` pode ser qualquer elemento JSON.
     * Ex.: `{"nome" : "Alice", "idade" : 60}`.
 
-Não existe um formato específico para timestamps (data e hora) em JSON, mas costuma-se seguir o padrão [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601).
-Documentação oficial: https://www.json.org/json-pt.html.
+Não existe sintaxe JSON para:
+* Comentários: JSON é um formato de dados apenas. Podemos criar uma chave `"_comentario"`, por exemplo, e usar o valor dela como comentário.
+Porém isso não é uma boa prática e devemos evitar transmitir esse valor.
+* Timestamps (data e hora): usa-se uma string comum, e costuma-se seguir o padrão [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601).
+
+Mais informações na [Documentação oficial](https://www.json.org/json-pt.html).
 
 ## Exemplos
 Esta pasta contém exemplos de arquivos JSON.
-Há também um script `ler_json.php` que lê, interpreta e o conteúdo e exibe o
+Há também um script `ler_json.php` que lê, interpreta o conteúdo e exibe o
 valor de qualquer arquivo JSON.
 Perceba que cada arquivo exemplo é um documento JSON válido.
 
