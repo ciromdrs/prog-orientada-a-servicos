@@ -9,7 +9,7 @@ Todo documento XML é uma árvore, que deve ter um elemento raiz.
 Elementos XML são delimitados por tags de abertura e fechamento rotuladas.
   Ex.: `<minha_tag>conteúdo</minha_tag>`
 
-*Atenção!* XML parece HTML, mas diferentemente de HTML:
+**Atenção!** XML parece HTML, mas diferentemente de HTML:
 * As tags XML são case-sensitive, isto é, diferenciam maiúsculas de minúsculas.
 Ex.:
 `<pessoa>` é diferente de `<Pessoa>`.
