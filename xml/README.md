@@ -62,6 +62,12 @@ valor de qualquer arquivo XML.
 
 ## Exercícios
 1. Use o script `ler_xml.php` para ler o conteúdo de cada arquivo.
+```
+php ler_xml.php arquivo.xml
+```
+Analise o conteúdo de cada arquivo abrindo no editor de texto e compare com a
+saída do script.
+O PHP exibiu o valor correto? Ele conseguiu inferir o tipo dos dados?
 
 2. Altere o arquivo `ifrn.xml`:
     1. Adicione os dados do Campus Caicó.
@@ -75,3 +81,6 @@ valor de qualquer arquivo XML.
     consultou esses dados.
     É preferível usar o formato ISO 8601 para o timestamp.
     Você pode encontrar o timestamp atual nesse formato na internet.
+
+3. Analise o script `ler_xml.php`.
+Tente entender como ele funciona.
