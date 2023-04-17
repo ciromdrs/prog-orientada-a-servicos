@@ -5,7 +5,7 @@ https://jsonlint.com/ para corrigí-los.
 */
 
 if (sizeof($argv) != 2) {
-    echo "Uso: php {$argv[0]} arquivo.json\n";
+    echo "Uso: php ler_json.php arquivo.json\n";
     exit(1);
 }
 
