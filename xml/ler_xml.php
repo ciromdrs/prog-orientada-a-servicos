@@ -6,7 +6,7 @@ https://www.xmlvalidation.com/ para corrigí-los.
 
 // Verifica os argumentos.
 if (sizeof($argv) != 2) {
-    echo "Uso: {$argv[0]} arquivo.xml\n";
+    echo "Uso: php ler_xml.php arquivo.xml\n";
     exit(1);
 }
 
