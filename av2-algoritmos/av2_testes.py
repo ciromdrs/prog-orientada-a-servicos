@@ -70,7 +70,7 @@ class Teste():
             return self._formatar_erro(f'Erro de sintaxe.' +
             f' Execute o arquivo {self.script} para mais detalhes.')
         else:
-            return self._formatar_erro(f"{erro}")
+            return self._formatar_erro(f"Codigo do erro: {codigo}")
 
     def _formatar_erro(self, erro):
         return f'Comando: {self.comando}\n  {erro}'
