@@ -59,19 +59,19 @@ class Teste():
         codigo = processo.close()
         codigo = 0 if codigo == None else codigo
 
-        if codigo == 0:
-            # Arquivo foi executado, verifica resposta.
+        if codigo == 0: # O script funcionou
+            # Verifica a resposta
             ok, erro = self.func_expect(resposta, *self.args_expect)
             if not ok:
                 return self._formatar_erro(erro)
             return None
-        elif codigo == 256: # File not found.
+        elif codigo == 256: # File not found
             return self._formatar_erro(f'Arquivo {self.script} não encontrado.')
-        elif codigo == 65280:
+        elif codigo == 65280: # PHP Syntax Errror
             return self._formatar_erro(f'Erro de sintaxe.' +
             f' Execute o arquivo {self.script} para mais detalhes.')
         else:
-            return self._formatar_erro(f"Codigo do erro: {codigo}")
+            return self._formatar_erro(f"Erro {codigo}: {resposta}")
 
     def _formatar_erro(self, erro):
         return f'Comando: {self.comando}\n  {erro}'
