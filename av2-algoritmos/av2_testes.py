@@ -92,7 +92,9 @@ questions = {
     'Q1': lambda: questao('Q1', 'q1.php', [('', testar_igual, ['string(13) "Hello, world!"'])]),
     'Q2': lambda: questao('Q2', 'q2.php', [('Ciro', testar_igual, ['string(12) "Hello, Ciro!"'])]),
     'Q3': lambda: questao('Q3', 'q3.php', [('10.5 14.3 35.2', testar_igual, ['float(20)'])]),
-    'Q4': lambda: (questao('Q4', 'q4.php', [('525', testar_igual, ['string(7) "0h8m45s"'])]), questao('Q4', 'q4.php', [('3679', testar_igual, ['string(7) "1h1m19s"'])])),
+    'Q4': lambda: questao('Q4', 'q4.php', [
+        ('525', testar_igual, ['string(7) "0h8m45s"']),
+        ('3679', testar_igual, ['string(7) "1h1m19s"'])]),
     'Q5': lambda: questao('Q5', 'q5.php', [('3 5 6 1', testar_igual, ['float(5)'])]),
     'Q6': lambda: questao('Q6', 'q6.php', [
         ('17', testar_igual, ['string(5) "Menor"']),
@@ -162,7 +164,7 @@ questions = {
     ]),
     'Q18': lambda: questao('Q18', 'q18.php', [
         ('arq_exemplo.txt', testar_igual, [
-            'string(34) "Eu sou apenas um arquivo exemplo."'])
+            'string(33) "Eu sou apenas um arquivo exemplo."'])
     ]),
     'Q19': lambda: questao('Q19', 'q19.php', [
         ('Alice 45 Bob Claire', testar_igual, [
