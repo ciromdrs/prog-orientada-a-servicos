@@ -98,7 +98,7 @@ def testar_igual(resultado: str, esperado: str,
         s1 = m(s1)
         s2 = m(s2)
     if s1 != s2:
-        erro = f"Esperava '{resultado}', recebeu '{esperado}'"
+        erro = f"Esperava '{esperado}', recebeu '{resultado}'"
         return False, erro
     return True, ''
 
