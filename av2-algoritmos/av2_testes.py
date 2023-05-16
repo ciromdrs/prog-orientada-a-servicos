@@ -3,7 +3,7 @@
 Script para correção automática das respostas.
 '''
 
-import os, sys
+import os, re, sys
 
 # Verifica o comando
 if len(sys.argv) > 3:
@@ -17,7 +17,11 @@ Exemplos:
 ''')
     exit(1)
 
+
+
 # Código para testar questões
+
+
 dir = sys.argv[1] if len(sys.argv) == 2 else '.'
 respostas_certas = 0
 respostas_erradas = 0
@@ -77,13 +81,28 @@ class Teste():
         return f'Comando: {self.comando}\n  {erro}'
 
 
-def testar_igual(resultado: str, esperado: str, strip="\n ") -> bool | tuple[bool, str]:
-    resultado = resultado.strip(strip)
-    esperado = esperado.strip(strip)
-    if resultado != esperado:
-        erro = f"Esperava '{esperado}', recebeu '{resultado}'"
+def trim(texto, caracteres='\n\r\t '):
+    return texto.strip(caracteres)
+
+
+def ignorar_ordem_de_objetos(objeto):
+    return re.sub('#\d+', '', objeto)
+
+
+def testar_igual(resultado: str, esperado: str,
+    modificadores: list = [trim, ignorar_ordem_de_objetos]) -> \
+    tuple[bool, str]:
+    s1 = resultado
+    s2 = esperado
+    for m in modificadores:
+        s1 = m(s1)
+        s2 = m(s2)
+    if s1 != s2:
+        erro = f"Esperava '{resultado}', recebeu '{esperado}'"
         return False, erro
     return True, ''
+
+
 
 # Testes
 
