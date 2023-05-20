@@ -58,11 +58,6 @@ urls['balde'] = urls['baldes'] + '/{balde}'
 urls['objeto'] = urls['balde'] + '/{chave}'
 
 
-@app.route('/hello-world')
-def hello_world():
-    return 'Hello, world!'
-
-
 @app.route(_furl('root'), methods=['GET'])
 def root():
     resp = Response(status = 200)
