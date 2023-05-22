@@ -110,6 +110,7 @@ function menu_criar() {
 
     // Envia a requisição PUT ao serviço de dados
     [$_, $_] = req_PUT_nota($chave, $texto);
+     // TODO: Exibir possível mensagem de erro
 }
 
 
@@ -120,6 +121,7 @@ function menu_apagar() {
 
     // Envia a requisição DELETE ao serviço de dados
     [$resp, $_] = req_DELETE_nota($chave);
+    // TODO: Exibir possível mensagem de erro
 }
 
 
