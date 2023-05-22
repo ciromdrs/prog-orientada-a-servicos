@@ -9,7 +9,7 @@ if (sizeof($argv) != 2) {
 
 
 
-// Constantes e Variáveis Globais
+// CONSTANTES E VARIÁVEIS GLOBAIS
 
 
 // Opções de menus
@@ -20,12 +20,12 @@ const OPCAO_APAGAR = 2;
 // URL do serviço de dados
 $url_servico_dados = $argv[1];
 
-// Próxima chave de notas
+// Próxima chave de notas. TODO: Guardar essa chave no serviço de dados.
 $prox_chave = 0;
 
 
 
-// Inicialização
+// INICIALIZAÇÃO
 
 
 // Obtém as URLs do serviço de dados
@@ -67,7 +67,7 @@ while($opcao != OPCAO_SAIR);
 
 
 
-// Menus
+// MENUS
 
 
 function menu_principal() {
@@ -124,24 +124,41 @@ function menu_apagar() {
 
 
 
-// Requisições
+// REQUISIÇÕES
 
-
+/**
+ * Função genérica para enviar requisições usando a extensão cURL para PHP.
+ */
 function enviar_requisicao($url, $curl_options = []) {
+    // Inicializa o canal de comunicação
     $ch = curl_init($url);
+
+    // Esta opção configura o cURL para retornar o valor da resposta, em vez de
+    // apenas exibí-lo na tela.
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+    // Atribui as demais opções passadas como parâmetro.
     foreach($curl_options as [$opt, $val]){
         curl_setopt($ch, $opt, $val);
     }
+
+    // Envia a requisição HTTP e retorna o corpo da resposta HTTP
     $resposta = curl_exec($ch);
+
+    // Acessa informações sobre a resposta
     $info = curl_getinfo($ch);
+
+    // Acessa possível erro na requisição
     $erro = curl_error($ch);
     if ($erro != '') {
         echo "Erro do cURL: $erro\n";
         var_dump($info['http_code'], $resposta);
     }
 
+    // Fecha o canal de comunicação
     curl_close($ch);
+
+    // Retorna a resposta e as informações
     return [$resposta, $info];
 }
 
@@ -217,7 +234,7 @@ function req_PUT_nota($chave, $texto) {
 
 
 
-// Funções auxiliares
+// FUNÇÕES AUXILIARES
 
 
 /**
