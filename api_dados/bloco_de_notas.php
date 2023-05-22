@@ -29,7 +29,7 @@ $prox_chave = 0;
 
 
 // Obtém as URLs do serviço de dados
-$urls = req_get_urls($url_servico_dados);
+$urls = req_GET_urls($url_servico_dados);
 if ($urls == NULL) {
     echo "Erro obtendo URLs.\n";
     exit(1);
@@ -37,10 +37,10 @@ if ($urls == NULL) {
 
 
 // Verifica se o balde 'notas' existe, usando uma requisição HEAD
-[$resp, $info] = req_head_balde_notas();
+[$resp, $info] = req_HEAD_balde_notas();
 if ($info['http_code'] == 404) {
     # Balde das notas não existe. É preciso criar.
-    [$resp, $info] = req_put_balde_notas();
+    [$resp, $info] = req_PUT_balde_notas();
 
     // Se não deu certo criar o balde, aborta
     if ($info['http_code'] != 201) {
@@ -74,7 +74,7 @@ function menu_principal() {
     global $urls, $prox_chave;
 
     // Acessa as notas cadastradas
-    $notas = req_get_notas();
+    $notas = req_GET_notas();
 
     // Encontra a próxima chave de notas
     foreach ($notas as $nota)
@@ -109,7 +109,7 @@ function menu_criar() {
     $prox_chave++; // Incrementa o contador de notas
 
     // Envia a requisição PUT ao serviço de dados
-    [$_, $_] = req_put_nota($chave, $texto);
+    [$_, $_] = req_PUT_nota($chave, $texto);
 }
 
 
@@ -119,7 +119,7 @@ function menu_apagar() {
     $chave = readline();
 
     // Envia a requisição DELETE ao serviço de dados
-    [$resp, $_] = req_delete_nota($chave);
+    [$resp, $_] = req_DELETE_nota($chave);
 }
 
 
@@ -146,7 +146,7 @@ function enviar_requisicao($url, $curl_options = []) {
 }
 
 
-function req_get_notas() {
+function req_GET_notas() {
     global $urls;
     [$resp, $_] = enviar_requisicao(_url('balde', [['{balde}', 'notas']]));
     $notas = json_decode($resp);
@@ -154,7 +154,7 @@ function req_get_notas() {
 }
 
 
-function req_get_urls($url_servico) {
+function req_GET_urls($url_servico) {
     [$resp, $info] = enviar_requisicao($url_servico);
     $urls = json_decode($resp,
                         $associative = true, // Retorna um array em vez de um
@@ -165,7 +165,7 @@ function req_get_urls($url_servico) {
 }
 
 
-function req_delete_nota($chave) {
+function req_DELETE_nota($chave) {
     return enviar_requisicao(
         _url('objeto', [['{balde}','notas'], ['{chave}', $chave]]),
         [[CURLOPT_CUSTOMREQUEST, 'DELETE']]
@@ -173,7 +173,7 @@ function req_delete_nota($chave) {
 }
 
 
-function req_head_balde_notas() {
+function req_HEAD_balde_notas() {
     return enviar_requisicao(
         _url('balde', [['{balde}', 'notas']]),
         [[CURLOPT_CUSTOMREQUEST, 'HEAD']]
@@ -181,7 +181,7 @@ function req_head_balde_notas() {
 }
 
 
-function req_put_balde_notas() {
+function req_PUT_balde_notas() {
     return enviar_requisicao(
         _url('balde', [['{balde}', 'notas']]),
         [
@@ -197,7 +197,7 @@ function req_put_balde_notas() {
 }
 
 
-function req_put_nota($chave, $texto) {
+function req_PUT_nota($chave, $texto) {
     return enviar_requisicao(
         _url(
             'objeto',
