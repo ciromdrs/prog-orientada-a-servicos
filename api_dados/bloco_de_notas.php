@@ -37,15 +37,15 @@ if ($urls == NULL) {
 
 
 // Verifica se o balde 'notas' existe, usando uma requisição HEAD
-[$resp, $info] = req_HEAD_balde_notas();
-if ($info['http_code'] == 404) {
+$resp = req_HEAD_balde_notas();
+if ($resp['codigo'] == 404) {
     # Balde das notas não existe. É preciso criar.
-    [$resp, $info] = req_PUT_balde_notas();
+    $resp = req_PUT_balde_notas();
 
     // Se não deu certo criar o balde, aborta
-    if ($info['http_code'] != 201) {
+    if ($resp['codigo'] != 201) {
         echo "Erro ao criar balde de notas.\n";
-        echo "Erro {$info['http_code']}: $resp";
+        echo "Erro {$resp['codigo']}: {$resp['corpo']}\n";
         exit(1);
     }
 }
@@ -109,7 +109,7 @@ function menu_criar() {
     $prox_chave++; // Incrementa o contador de notas
 
     // Envia a requisição PUT ao serviço de dados
-    [$_, $_] = req_PUT_nota($chave, $texto);
+    $resp = req_PUT_nota($chave, $texto);
      // TODO: Exibir possível mensagem de erro
 }
 
@@ -120,7 +120,7 @@ function menu_apagar() {
     $chave = readline();
 
     // Envia a requisição DELETE ao serviço de dados
-    [$resp, $_] = req_DELETE_nota($chave);
+    $resp = req_DELETE_nota($chave);
     // TODO: Exibir possível mensagem de erro
 }
 
@@ -132,50 +132,56 @@ function menu_apagar() {
  * Função genérica para enviar requisições usando a extensão cURL para PHP.
  */
 function enviar_requisicao($url, $curl_options = []) {
+    // Cria array para guardar as informações da resposta
+    $resposta = [];
+
     // Inicializa o canal de comunicação
     $ch = curl_init($url);
-
     // Esta opção configura o cURL para retornar o valor da resposta, em vez de
     // apenas exibí-lo na tela.
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
     // Atribui as demais opções passadas como parâmetro.
     foreach($curl_options as [$opt, $val]){
         curl_setopt($ch, $opt, $val);
     }
 
     // Envia a requisição HTTP e retorna o corpo da resposta HTTP
-    $resposta = curl_exec($ch);
-
+    $resposta['corpo'] = curl_exec($ch);
+    // Extrai os cabecalhos da resposta HTTP
+    $resposta['cabecalhos'] = 'Não implementado';
     // Acessa informações sobre a resposta
-    $info = curl_getinfo($ch);
-
+    $resposta['info'] = curl_getinfo($ch);
+    // Extrai o código de estado HTTP
+    $resposta['codigo'] = $resposta['info']['http_code'];
     // Acessa possível erro na requisição
-    $erro = curl_error($ch);
-    if ($erro != '') {
-        echo "Erro do cURL: $erro\n";
-        var_dump($info['http_code'], $resposta);
-    }
-
+    $resposta['erro'] = curl_error($ch);
     // Fecha o canal de comunicação
     curl_close($ch);
 
     // Retorna a resposta e as informações
-    return [$resposta, $info];
+    return $resposta;
 }
 
 
 function req_GET_notas() {
     global $urls;
-    [$resp, $_] = enviar_requisicao(_url('balde', [['{balde}', 'notas']]));
-    $notas = json_decode($resp);
+    $resp = enviar_requisicao(
+        _url('balde', [['{balde}', 'notas']])
+    );
+    // Se não deu certo criar o balde, aborta
+    if ($resp['codigo'] != 200) {
+        echo "Erro obtendo notas.\n";
+        echo "Erro {$resp['codigo']}: {$resp['corpo']}";
+        exit(1);
+    }
+    $notas = json_decode($resp['corpo']);
     return $notas;
 }
 
 
 function req_GET_urls($url_servico) {
-    [$resp, $info] = enviar_requisicao($url_servico);
-    $urls = json_decode($resp,
+    $resp = enviar_requisicao($url_servico);
+    $urls = json_decode($resp['corpo'],
                         $associative = true, // Retorna um array em vez de um
                                              // objeto padrão.
                         flags : JSON_THROW_ON_ERROR); // Lança exceções em
