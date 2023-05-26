@@ -85,6 +85,7 @@ def root():
 
 @app.route(_url('baldes'), methods=['GET'])
 def baldes():
+    # TODO: Retornar os URIs dos baldes
     db = get_db()
 
     # Listar baldes
@@ -98,6 +99,7 @@ def baldes():
 
 @app.route(_url('balde'), methods=['GET', 'HEAD', 'PUT', 'DELETE', 'POST'])
 def balde(balde):
+    # TODO: Retornar os URIs dos objetos
     db = get_db()
 
     # Acessa o balde
