@@ -45,6 +45,7 @@ def db_execute(comando, args):
     return cursor
 
 
+
 # FUNÇÕES AUXILIARES
 
 
@@ -168,7 +169,7 @@ def balde(balde):
 
         # O cliente não envia a chave, então precisamos pegar a próxima
         cmd_chave = 'SELECT seq FROM sqlite_sequence WHERE name="objetos"'
-        prox_chave = db_fetchall(cmd_chave, [])[0]['seq']
+        prox_chave = db_fetchall(cmd_chave, [])[0]['seq'] + 1
         dados['chave'] = prox_chave
         cmd_insert = 'INSERT INTO objetos (chave, valor, balde, usuario) \
                       VALUES (:chave, :valor, :balde, :usuario);'
