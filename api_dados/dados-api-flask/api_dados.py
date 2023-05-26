@@ -219,6 +219,11 @@ def objeto(balde, chave):
         return Response(status = 200)
 
 
+@app.errorhandler(404)
+def nao_encontrado(erro):
+    return "Não encontrado."
+
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
