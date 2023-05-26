@@ -31,6 +31,12 @@ def db_fetchall(comando, args):
     return rows
 
 
+def db_execute(comando, args):
+    db = get_db()
+    cursor = db.execute(comando, args)
+    db.commit()
+    return cursor
+
 
 # FUNÇÕES AUXILIARES
 
@@ -82,24 +88,26 @@ def baldes():
     return resp
 
 
-@app.route(_url('balde'), methods=['GET', 'HEAD', 'PUT', 'DELETE'])
+@app.route(_url('balde'), methods=['GET', 'HEAD', 'PUT', 'DELETE', 'POST'])
 def balde(balde):
     db = get_db()
 
-    # Validação comum
+    # Acessa o balde
     comando = 'SELECT * FROM baldes WHERE nome=:nome'
     baldes = db_fetchall(comando, {'nome' : balde})
-    if request.method in ['GET', 'HEAD', 'DELETE']:
+    balde_existe = len(baldes) == 1
+
+    # Validação comum a todos os métodos HTTP
+    if len(baldes) > 1:
+        return Response(f'Erro no servidor: há mais de 1 balde {balde}.',
+            status = 500)
+    # Validações específicas
+    if request.method in ['GET', 'HEAD', 'DELETE', 'POST']:
         # Não encontrou
-        if len(baldes) < 1:
+        if not balde_existe:
             return Response(
                 f'Requisição inválida: Balde {balde} não encontrado.',
                 status = 404)
-
-        # Encontrou mais de um
-        if len(baldes) > 1:
-            return Response(f'Erro no servidor: há mais de 1 balde {balde}.',
-                status = 500)
 
     # Tratamento da requisição
     if request.method in ['GET', 'HEAD']:
@@ -113,9 +121,9 @@ def balde(balde):
         return resp
 
     elif request.method == 'PUT':
-        if len(baldes) > 0:
+        if balde_existe:
             resp = Response(status = 400)
-            resp.data = f'Balde {balde} já existe.'
+            resp.data = f'Requisiçao inválida: o balde {balde} já existe.'
             return resp
 
         # Criar balde
@@ -134,7 +142,8 @@ def balde(balde):
         cursor = db.execute(comando, {'balde' : balde})
         if len(cursor.fetchall()) > 0:
             resp = Response(status = 409)
-            resp.data = f'Impossível remover balde {balde}: ele não está vazio.'
+            resp.data = f'Conflito: Impossível remover balde {balde}.' + \
+                         ' Ele não está vazio.'
             return resp
 
         # Balde vazio, apagar
@@ -142,6 +151,25 @@ def balde(balde):
         db.execute(comando, {'balde' : balde})
         db.commit()
         return Response(status = 200)
+
+    elif request.method == 'POST':
+        # Uma requisição POST a um balde cria um objeto com uma chave gerada
+        dados = request.json
+        dados['balde'] = balde
+        app.logger.info('dados: %s', dados)
+        cmd_insert = '' # Comando SQL para inserir ou alterar dados, dependendo
+                        # da requisição.
+
+        # O cliente não envia a chave, então precisamos pegar a próxima
+        cmd_chave = 'SELECT seq FROM sqlite_sequence WHERE name="objetos"'
+        prox_chave = db_fetchall(cmd_chave, [])[0]['seq']
+        dados['chave'] = prox_chave
+        cmd_insert = 'INSERT INTO objetos (chave, valor, balde, usuario) \
+                      VALUES (:chave, :valor, :balde, :usuario);'
+        db.execute(cmd_insert, dados)
+        db.commit()
+        resp = Response(201)
+        return resp
 
 
 @app.route(_url('objeto'), methods=['GET', 'PUT', 'DELETE'])

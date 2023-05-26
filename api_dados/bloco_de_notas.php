@@ -20,9 +20,6 @@ const OPCAO_APAGAR = 2;
 // URL do serviço de dados
 $url_servico_dados = $argv[1];
 
-// Próxima chave de notas. TODO: Guardar essa chave no serviço de dados.
-$prox_chave = 0;
-
 
 
 // INICIALIZAÇÃO
@@ -71,15 +68,10 @@ while($opcao != OPCAO_SAIR);
 
 
 function menu_principal() {
-    global $urls, $prox_chave;
+    global $urls;
 
     // Acessa as notas cadastradas
     $notas = req_GET_notas();
-
-    // Encontra a próxima chave de notas
-    foreach ($notas as $nota)
-        if ($nota->chave >= $prox_chave)
-            $prox_chave = $nota->chave + 1;
 
     // Exibe a interface
     echo "\n--------------- BLOCO DE NOTAS ---------------\n";
@@ -99,17 +91,12 @@ function menu_principal() {
 
 
 function menu_criar() {
-    global $prox_chave;
-
     // Recebe o texto da nota
     echo "Digite o texto da nota:\n";
     $texto = readline();
 
-    $chave = $prox_chave; // Pega a chave da próxima nota
-    $prox_chave++; // Incrementa o contador de notas
-
-    // Envia a requisição PUT ao serviço de dados
-    $resp = req_PUT_nota($chave, $texto);
+    // Envia a requisição ao serviço de dados
+    $resp = req_POST_nota($texto);
      // TODO: Exibir possível mensagem de erro
 }
 
@@ -222,14 +209,11 @@ function req_PUT_balde_notas() {
 }
 
 
-function req_PUT_nota($chave, $texto) {
+function req_POST_nota($texto) {
     return enviar_requisicao(
-        _url(
-            'objeto',
-            [['{balde}', 'notas'], ['{chave}', $chave]]
-        ),
+        _url('balde', [['{balde}', 'notas']]),
         [
-            [CURLOPT_CUSTOMREQUEST, 'PUT'],
+            [CURLOPT_CUSTOMREQUEST, 'POST'],
             [CURLOPT_HTTPHEADER, array('Content-Type: application/json')],
             [CURLOPT_POSTFIELDS, json_encode([
                     'usuario' => 'bloco_de_notas',
