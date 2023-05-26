@@ -31,6 +31,13 @@ def db_fetchall(comando, args):
     return rows
 
 
+def db_fetchone(comando, args):
+    cursor = get_db().execute(comando, args)
+    row = cursor.fetchone()
+    cursor.close()
+    return row
+
+
 def db_execute(comando, args):
     db = get_db()
     cursor = db.execute(comando, args)
@@ -156,7 +163,6 @@ def balde(balde):
         # Uma requisição POST a um balde cria um objeto com uma chave gerada
         dados = request.json
         dados['balde'] = balde
-        app.logger.info('dados: %s', dados)
         cmd_insert = '' # Comando SQL para inserir ou alterar dados, dependendo
                         # da requisição.
 
@@ -168,46 +174,48 @@ def balde(balde):
                       VALUES (:chave, :valor, :balde, :usuario);'
         db.execute(cmd_insert, dados)
         db.commit()
-        resp = Response(201)
+        resp = Response(status = 201)
         return resp
 
 
-@app.route(_url('objeto'), methods=['GET', 'PUT', 'DELETE'])
+@app.route(_url('objeto'), methods=['GET', 'HEAD', 'PUT', 'DELETE'])
 def objeto(balde, chave):
+    # Verificar se a chave existe
+    comando = 'SELECT * FROM objetos WHERE balde=:balde AND chave=:chave;'
+    objeto = db_fetchone(comando, [balde, chave])
+
+    # Validação comum a vários métodos
+    if request.method in ['GET', 'HEAD', 'DELETE']:
+        if objeto == None:
+            resp = Response(status = 404)
+            resp.data = f'Chave {chave} não encontrada no balde {balde}.'
+            return resp
+
     if request.method == 'GET':
-        # Acessar objeto
-        comando = 'SELECT * FROM objetos \
-                   WHERE balde=:balde AND chave=:chave;'
-        cursor = get_db().execute(comando, [balde, chave])
-        row = cursor.fetchone()
-        cursor.close()
-        if row == None:
-            return Response(status = 404)
-        else:
-            return row
+        return objeto
 
     elif request.method == 'PUT':
         # Criar objeto
+        insert_replace = 'INSERT'
+        resp = Response(status = 200)
+        if objeto != None:
+            # Alterar objeto
+            insert_replace = 'REPLACE'
+            resp.status = 201
+        comando = insert_replace + \
+                  ' INTO objetos (chave, valor, balde, usuario) \
+                    VALUES (:chave, :valor, :balde, :usuario);'
         dados = request.json
         dados['chave'] = chave
         dados['balde'] = balde
-        comando = 'INSERT OR REPLACE \
-                   INTO objetos (chave, valor, balde, usuario) \
-                   VALUES (:chave, :valor, :balde, :usuario);'
-        db = get_db()
-        db.execute(comando, dados)
-        db.commit()
-
-        resp = Response(status=200)
+        db_execute(comando, dados)
         return resp
 
     elif request.method == 'DELETE':
         # Apagar objeto
         comando = 'DELETE FROM objetos WHERE chave=:chave AND balde=:balde;'
-        db = get_db()
-        cursor = db.execute(comando, {'chave' : chave, 'balde' : balde})
-        db.commit()
-        return Response(status = 200 if cursor.rowcount > 0 else 404)
+        db_execute(comando, {'chave' : chave, 'balde' : balde})
+        return Response(status = 200)
 
 
 @app.teardown_appcontext
