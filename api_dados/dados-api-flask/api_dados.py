@@ -6,7 +6,7 @@ from flask import Flask, g, request, Response
 
 
 
-# Database
+# BANCO DE DADOS
 
 
 DATABASE = 'dados.sqlite3'
@@ -32,10 +32,10 @@ def db_fetchall(comando, args):
 
 
 
-# Auxiliary functions
+# FUNÇÕES AUXILIARES
 
 
-def _furl(key):
+def _url(key):
     '''Get an URL written in Flask's pattern syntax.'''
     global urls
     res = urls[key]
@@ -45,12 +45,13 @@ def _furl(key):
 
 
 
-
-# Flask
+# FLASK
 
 
 app = Flask(__name__)
 
+
+# Padrões de URL
 urls = {}
 urls['root'] = '/'
 urls['baldes'] = urls['root'] + 'baldes'
@@ -58,7 +59,9 @@ urls['balde'] = urls['baldes'] + '/{balde}'
 urls['objeto'] = urls['balde'] + '/{chave}'
 
 
-@app.route(_furl('root'), methods=['GET'])
+# Rotas
+
+@app.route(_url('root'), methods=['GET'])
 def root():
     resp = Response(status = 200)
     resp.data = json.dumps(urls)
@@ -66,7 +69,7 @@ def root():
     return urls
 
 
-@app.route(_furl('baldes'), methods=['GET'])
+@app.route(_url('baldes'), methods=['GET'])
 def baldes():
     db = get_db()
 
@@ -79,34 +82,42 @@ def baldes():
     return resp
 
 
-@app.route(_furl('balde'), methods=['GET', 'HEAD', 'PUT', 'DELETE'])
+@app.route(_url('balde'), methods=['GET', 'HEAD', 'PUT', 'DELETE'])
 def balde(balde):
     db = get_db()
 
-    if request.method in ['GET', 'HEAD']:
-        # Verificar se o balde existe
-        comando = 'SELECT * FROM baldes WHERE nome=:nome'
-        rows = db_fetchall(comando, {'nome' : balde})
-
+    # Validação comum
+    comando = 'SELECT * FROM baldes WHERE nome=:nome'
+    baldes = db_fetchall(comando, {'nome' : balde})
+    if request.method in ['GET', 'HEAD', 'DELETE']:
         # Não encontrou
-        if len(rows) < 1:
-            return Response(status = 404)
+        if len(baldes) < 1:
+            return Response(
+                f'Requisição inválida: Balde {balde} não encontrado.',
+                status = 404)
 
         # Encontrou mais de um
-        if len(rows) > 1:
-            return Response(status = 500)
+        if len(baldes) > 1:
+            return Response(f'Erro no servidor: há mais de 1 balde {balde}.',
+                status = 500)
 
-        # Encontrou apenas um
+    # Tratamento da requisição
+    if request.method in ['GET', 'HEAD']:
         resp = Response(status = 200)
         if request.method == 'GET':
             # Listar dados
-            comando = 'SELECT * FROM chave_valor WHERE balde=:balde'
-            rows = db_fetchall(comando, {'balde' : balde})
-            resp.data = json.dumps(rows)
+            comando = 'SELECT * FROM objetos WHERE balde=:balde'
+            objetos = db_fetchall(comando, {'balde' : balde})
+            resp.data = json.dumps(objetos)
             resp.mimetype = 'application/json'
         return resp
 
     elif request.method == 'PUT':
+        if len(baldes) > 0:
+            resp = Response(status = 400)
+            resp.data = f'Balde {balde} já existe.'
+            return resp
+
         # Criar balde
         dados = request.json
         dados['balde'] = balde
@@ -119,23 +130,25 @@ def balde(balde):
 
     elif request.method == 'DELETE':
         # Se o balde não estiver vazio, retorna erro
-        comando = 'SELECT FROM chave_valor WHERE balde=:balde;'
+        comando = 'SELECT FROM objetos WHERE balde=:balde;'
         cursor = db.execute(comando, {'balde' : balde})
         if len(cursor.fetchall()) > 0:
-            return Response(status = 409)
+            resp = Response(status = 409)
+            resp.data = f'Impossível remover balde {balde}: ele não está vazio.'
+            return resp
 
         # Balde vazio, apagar
-        comando = 'DELETE FROM chave_valor WHERE balde=:balde;'
-        cursor = db.execute(comando, {'balde' : balde})
+        comando = 'DELETE FROM objetos WHERE balde=:balde;'
+        db.execute(comando, {'balde' : balde})
         db.commit()
         return Response(status = 200)
 
 
-@app.route(_furl('objeto'), methods=['GET', 'PUT', 'DELETE'])
+@app.route(_url('objeto'), methods=['GET', 'PUT', 'DELETE'])
 def objeto(balde, chave):
     if request.method == 'GET':
         # Acessar objeto
-        comando = 'SELECT * FROM chave_valor \
+        comando = 'SELECT * FROM objetos \
                    WHERE balde=:balde AND chave=:chave;'
         cursor = get_db().execute(comando, [balde, chave])
         row = cursor.fetchone()
@@ -151,7 +164,7 @@ def objeto(balde, chave):
         dados['chave'] = chave
         dados['balde'] = balde
         comando = 'INSERT OR REPLACE \
-                   INTO chave_valor (chave, valor, balde, usuario) \
+                   INTO objetos (chave, valor, balde, usuario) \
                    VALUES (:chave, :valor, :balde, :usuario);'
         db = get_db()
         db.execute(comando, dados)
@@ -162,7 +175,7 @@ def objeto(balde, chave):
 
     elif request.method == 'DELETE':
         # Apagar objeto
-        comando = 'DELETE FROM chave_valor WHERE chave=:chave AND balde=:balde;'
+        comando = 'DELETE FROM objetos WHERE chave=:chave AND balde=:balde;'
         db = get_db()
         cursor = db.execute(comando, {'chave' : chave, 'balde' : balde})
         db.commit()
