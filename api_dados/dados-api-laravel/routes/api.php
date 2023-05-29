@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use \App\Models\Balde;
@@ -29,7 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/', function () use ($url) {
+Route::get($url['root'], function () use ($url) {
     return response()->json($url);
 });
 
@@ -42,7 +43,7 @@ Route::get($url['baldes'], function () {
 
 Route::get($url['balde'], function (string $balde) {
     if (Balde::where('nome', '=', $balde)->first() == NULL) {
-        return new Response("Balde $balde não encontrado", 404);
+        return new Response("Balde $balde não encontrado.", 404);
     }
     // TODO: Ao definir uma rota com GET, o Laravel define automaticamente a mesma
     // rota com o método HEAD. Por isso, podemos assumir que é um HEAD e deixar
@@ -56,9 +57,12 @@ Route::get($url['balde'], function (string $balde) {
 });
 
 Route::put($url['balde'], function (Request $request, string $balde) {
-    $reg = Balde::where('nome', '=', $balde)->first();
-    if ($reg == NULL)
-        $reg = new Balde;
+    if (Balde::where('nome', '=', $balde)->first() != NULL)
+        return new Response(
+            "Requisiçao inválida: o balde $balde já existe.",
+            400
+        );
+    $reg = new Balde;
     $reg->nome = $balde;
     $reg->usuario = $request->input('usuario');
     $reg->save();
@@ -66,30 +70,81 @@ Route::put($url['balde'], function (Request $request, string $balde) {
 });
 
 Route::delete($url['balde'], function (string $balde) {
-    $balde = Balde::where('nome', '=', $balde)->first();
-    if ($balde == NULL) {
-        return new Response('', 404);
-    }
-    $balde->delete();
+    $reg = Balde::where('nome', '=', $balde)->first();
+    if ($reg == NULL)
+        return new Response("Balde $balde não encontrado.", 404);
+    // Se o balde não estiver vazio, retorna erro
+    $objetos = Objeto::where('balde', '=', $balde)->get();
+    if (count($objetos) > 0)
+        return new Response(
+            "Conflito: Impossível remover balde $balde. Ele não está vazio.",
+            409
+        );
+    // Balde vazio, pode apagar
+    $reg->delete();
     return new Response('', 200);
 });
 
 
-Route::put($url['objeto'], function (string $balde, string $chave) {
+Route::post($url['balde'], function (string $balde) {
     if (Balde::where('nome', '=', $balde)->first() == NULL)
-        return new Response("Balde $balde não encontrado", 404);
+        return new Response("Balde $balde não encontrado.", 404);
+    // Pega a próxima chave da sequência
+    $seq_obj = DB::table('sqlite_sequence')
+        ->select('seq')
+        ->where('name', '=', 'objetos')
+        ->first();
+    $prox_chave = 1;
+    if ($seq_obj != NULL)
+        $prox_chave = $seq_obj->seq + 1;
+    $reg = new Objeto;
+    $reg->chave = $prox_chave;
+    $reg->usuario = request()->input('usuario');
+    $reg->balde = $balde;
+    $reg->valor = request()->input('valor');
+    $reg->save();
+    return new Response("", 201);
+});
+
+
+Route::get($url['objeto'], function (string $balde, string $chave) {
+    if (Balde::where('nome', '=', $balde)->first() == NULL)
+        return new Response("Balde $balde não encontrado.", 404);
     $reg = Objeto::where('chave', '=', $chave)
         ->where('balde', '=', $balde)
         ->first();
-    if ($reg == NULL) {
+    if ($reg == NULL)
+        return new Response(
+            "Chave $chave não encontrada no balde $balde.",
+            404
+        );
+    response()->json($reg);
+});
+
+Route::put($url['objeto'], function (string $balde, string $chave) {
+    if (Balde::where('nome', '=', $balde)->first() == NULL)
+        return new Response("Balde $balde não encontrado.", 404);
+    // Verifica se o recurso já existe
+    $reg = Objeto::where('chave', '=', $chave)
+        ->where('balde', '=', $balde)
+        ->first();
+    $existe = $reg != NULL;
+    // Se não existe, cria
+    if (!$existe) {
         $reg = new Objeto;
         $reg->chave = $chave;
         $reg->usuario = request()->input('usuario');
         $reg->balde = $balde;
     }
     $reg->valor = request()->input('valor');
-    $reg->save();
-    return new Response("", 201);
+
+    if ($existe) {
+        $reg->save();
+        return new Response("", 200);
+    } else {
+        $reg->create();
+        return new Response("", 201);
+    }
 });
 
 Route::delete($url['objeto'], function (string $balde, string $chave) {
@@ -102,5 +157,5 @@ Route::delete($url['objeto'], function (string $balde, string $chave) {
         return new Response("Objeto de chave $chave não encontrado no balde $balde", 404);
     }
     $reg->delete();
-    return new Response("", 201);
+    return new Response("", 200);
 });
