@@ -170,6 +170,7 @@ def balde(balde):
                         # da requisição.
 
         # O cliente não envia a chave, então precisamos pegar a próxima
+        # TODO: tratar caso em que a sequência ainda não foi criada
         cmd_chave = 'SELECT seq FROM sqlite_sequence WHERE name="objetos"'
         prox_chave = db_fetchall(cmd_chave, [])[0]['seq'] + 1
         dados['chave'] = prox_chave
