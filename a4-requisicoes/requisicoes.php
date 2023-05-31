@@ -1,5 +1,7 @@
 <?php
 
+$url_api = 'localhost:8000/api';
+
 /**
  * Função genérica para enviar requisições usando a extensão cURL para PHP.
  */
