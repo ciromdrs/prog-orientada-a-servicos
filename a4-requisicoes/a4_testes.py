@@ -4,12 +4,13 @@
 import os, sys
 
 # Verifica o comando
-if len(sys.argv) > 1:
+if len(sys.argv) > 2:
     print(
 f'''Uso:
-    python <nome-deste-script.py>
+    python <nome-deste-script.py> [Q<X>]
 Exemplos:
     python {sys.argv[0]}
+    python {sys.argv[0]} Q4
 ''')
     exit(1)
 
@@ -18,7 +19,7 @@ Exemplos:
 # SUITE DE TESTES
 
 
-dir = '.'
+dir = '.' # TODO: remover esta variável
 respostas_certas = 0
 respostas_erradas = 0
 
@@ -187,8 +188,8 @@ questoes = [
 ]
 
 
-if len(sys.argv) > 2:
-    questoes = [q for q in questoes if q.descricao == sys.argv[2]]
+if len(sys.argv) == 2:
+    questoes = [q for q in questoes if q.descricao == sys.argv[1]]
 
 for q in questoes:
     q.corrigir()
