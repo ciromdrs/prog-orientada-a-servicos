@@ -124,12 +124,15 @@ questoes = [
     ]),
     Questao('Q2', 'q2.php', [
         ('Alice', testar_igual, ['int(200)\nstring(13) "Hello, Alice!"']),
+        ('Bruno', testar_igual, ['int(200)\nstring(13) "Hello, Bruno!"']),
     ]),
     Questao('Q3', 'q3.php', [
         ('Alice', testar_igual, ['int(200)\nstring(13) "Hello, Alice!"']),
+        ('Bruno', testar_igual, ['int(200)\nstring(13) "Hello, Bruno!"']),
     ]),
     Questao('Q4', 'q4.php', [
         ('nome Alice idade 39', testar_igual, ['int(200)\nstring(20) "nome=Alice\nidade=39\n"\n']),
+        ('nome Bruno qtd_filhos 3', testar_igual, ['int(200)\nstring(24) "nome=Bruno\nqtd_filhos=3\n"\n']),
     ]),
 
     # HEAD
@@ -143,6 +146,42 @@ questoes = [
         ('Alice', testar_igual, ['int(200)\nstring(0) ""']),
     ]),
     Questao('Q8', 'q8.php', [
+        ('nome Alice idade 39', testar_igual, ['int(200)\nstring(0) ""']),
+    ]),
+
+    # POST
+    Questao('Q9', 'q9.php', [
+        ('', testar_igual, ['int(201)\nstring(0) ""']),
+    ]),
+    Questao('Q10', 'q10.php', [
+        ('Alice', testar_igual, ['int(201)\nstring(0) ""']),
+    ]),
+    Questao('Q11', 'q11.php', [
+        ('nome Alice idade 39', testar_igual, ['int(201)\nstring(0) ""']),
+    ]),
+    Questao('Q12', 'q12.php', [
+        ('nome Alice idade 39', testar_igual, ['int(201)\nstring(0) ""']),
+    ]),
+
+    # PUT
+    Questao('Q13', 'q13.php', [
+        ('', testar_igual, ['int(200)\nstring(0) ""']),
+    ]),
+    Questao('Q14', 'q14.php', [
+        ('nome Alice idade 39', testar_igual, ['int(200)\nstring(0) ""']),
+    ]),
+
+    # DELETE
+    Questao('Q15', 'q15.php', [
+        ('', testar_igual, ['int(200)\nstring(0) ""']),
+    ]),
+    Questao('Q16', 'q16.php', [
+        ('Alice', testar_igual, ['int(200)\nstring(0) ""']),
+    ]),
+    Questao('Q17', 'q17.php', [
+        ('Alice', testar_igual, ['int(200)\nstring(0) ""']),
+    ]),
+    Questao('Q18', 'q18.php', [
         ('nome Alice idade 39', testar_igual, ['int(200)\nstring(0) ""']),
     ]),
 ]
