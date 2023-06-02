@@ -49,6 +49,6 @@ function enviar_requisicao($url, $metodo = 'GET', $corpo = '',
     // Fecha o canal de comunicação
     curl_close($ch);
 
-    // Retorna a resposta e as informações
+    // Retorna a resposta
     return $resposta;
 }

@@ -6,11 +6,15 @@ Para responder esta avaliação, é necessário instalar PHP e Python3.
 
 ## Como responder esta avaliação
 1. Esta avaliação deve ser respondida em PHP.
-2. Adicione suas respostas a este diretório (`a4-requisicoes`).
-Envie um único arquivo RAR contendo todas as suas respostas.
+2. Crie neste mesmo diretório (`a4-requisicoes`) um arquivo para cada resposta com o nome qX.php, onde X corresponde ao número da questão.
 3. Não escreva entrada de dados via teclado.
 Escreva programas que recebem argumentos da linha de comando (use `$argv`) e
 apenas exibem o resultado usando a função `var_dump`.
+4. Importe o script `requisicoes.php` em todas as suas respostas.
+Esse script contém uma função muito útil para enviar requisições HTTP.
+Há comentários explicando como a função funciona: *leia-os com atenção*.
+5. Envie um único arquivo RAR contendo todas as suas respostas.
+
 
 ## Como conferir suas respostas
 Execute (apenas uma vez) o servidor Laravel que está na pasta `a4-servidor` usando `php artisan serve`.
