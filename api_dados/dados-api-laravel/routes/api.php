@@ -109,16 +109,14 @@ Route::post($url['balde'], function (string $balde) {
 
 Route::get($url['objeto'], function (string $balde, string $chave) {
     if (Balde::where('nome', '=', $balde)->first() == NULL)
-        return new Response("Balde $balde não encontrado.", 404);
+        return new Response("Balde $balde não encontrado", 404);
     $reg = Objeto::where('chave', '=', $chave)
         ->where('balde', '=', $balde)
         ->first();
-    if ($reg == NULL)
-        return new Response(
-            "Chave $chave não encontrada no balde $balde.",
-            404
-        );
-    response()->json($reg);
+    if ($reg == NULL) {
+        return new Response("Objeto de chave $chave não encontrado no balde $balde", 404);
+    }
+    return response()->json($reg);
 });
 
 Route::put($url['objeto'], function (string $balde, string $chave) {
@@ -137,14 +135,10 @@ Route::put($url['objeto'], function (string $balde, string $chave) {
         $reg->balde = $balde;
     }
     $reg->valor = request()->input('valor');
+    $reg->save();
 
-    if ($existe) {
-        $reg->save();
-        return new Response("", 200);
-    } else {
-        $reg->create();
-        return new Response("", 201);
-    }
+    $codigo = $existe ? 200 : 201;
+    return new Response("", $codigo);
 });
 
 Route::delete($url['objeto'], function (string $balde, string $chave) {
