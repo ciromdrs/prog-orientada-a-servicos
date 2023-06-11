@@ -1,5 +1,7 @@
 # Serviço de Dados
-Serviço genérico para armazenamento de dados no formato chave-valor que imita uma simplificação do AWS S3:
+## Descrição
+Serviço genérico para armazenamento de dados no formato chave-valor que imita
+uma simplificação do AWS S3:
 
 1. Os dados são chamados de _objetos_, e são armazenados dentro de _baldes_.
 
@@ -7,7 +9,7 @@ Serviço genérico para armazenamento de dados no formato chave-valor que imita 
 
 3. Cada dado pertence a apenas um balde, e tem uma chave única dentro dele.
 
-Endpoints:
+## Endpoints
 - `api/`:
   - `GET`: Retorna os padrões de URL da API.
 
@@ -23,7 +25,8 @@ Endpoints:
   - `PUT`: Cria um balde de nome `balde`.
     - Parâmetros:
       - `usuario`: o dono do balde.
-  - `POST`: Cria um objeto de chave inteira gerada automaticamente no balde `balde`.
+  - `POST`: Cria um objeto de chave inteira gerada automaticamente no balde
+    `balde`.
     - Parâmetros:
       - `usuario`: o dono do objeto.
       - `valor`: o dado em si.
@@ -41,3 +44,20 @@ Endpoints:
       - `usuario`: o dono do objeto.
       - `valor`: o dado a ser armazenado sob a chave `chave`.
   - `DELETE`: Apaga o objeto de chave `chave` do balde `balde`.
+
+
+## Como executar
+Instale as dependências:
+```
+composer install
+```
+
+Execute as migrações (responda `y` para criar o banco):
+```
+php artisan migrate
+```
+
+Execute o servidor:
+```
+php artisan serve
+```
