@@ -61,3 +61,8 @@ Execute o servidor:
 ```
 php artisan serve
 ```
+
+Caso isto não funcione, pode ser necessário criar uma chave (`APP_KEY`):
+```
+php artisan key:generate
+```
