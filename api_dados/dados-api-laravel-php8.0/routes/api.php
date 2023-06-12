@@ -86,7 +86,7 @@ Route::delete($url['balde'], function (string $balde) {
 });
 
 
-Route::post($url['balde'], function (string $balde) {
+Route::post($url['balde'], function (string $balde) use ($url) {
     if (Balde::where('nome', '=', $balde)->first() == NULL)
         return new Response("Balde $balde não encontrado.", 404);
     // Pega a próxima chave da sequência
@@ -103,7 +103,13 @@ Route::post($url['balde'], function (string $balde) {
     $reg->balde = $balde;
     $reg->valor = request()->input('valor');
     $reg->save();
-    return new Response("", 201);
+    return response("", 201)->header(
+        'Location',
+        _url_replace(
+            $url['objeto'],
+            ['balde' => $balde, 'chave' => $prox_chave]
+        )
+    );
 });
 
 
@@ -153,3 +159,12 @@ Route::delete($url['objeto'], function (string $balde, string $chave) {
     $reg->delete();
     return new Response("", 200);
 });
+
+
+function _url_replace(string $url, array $valores) {
+    $replaced = $url;
+    foreach ($valores as $nome => $valor) {
+        $replaced = str_replace("{{$nome}}", $valor, $replaced);
+    }
+    return $replaced;
+}
