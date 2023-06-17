@@ -1,0 +1,15 @@
+# Teste isto em https://www.yamllint.com/
+chaves :
+    também podem ser bem mais complexas do que apenas uma : string.
+    exemplos:
+        true : chave do tipo booleano
+        123 : chave do tipo inteiro
+        # inclusive, chaves podem ser listas e outros nós complexos, indicadas
+        # pelo caractere `?`
+        ? [ mas,
+            não,
+            vamos ]
+        : precisar disto
+        ?
+          - até porque o suporte a chaves compostas ainda
+          - é limitado.

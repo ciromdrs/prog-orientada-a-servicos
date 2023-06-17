@@ -1,0 +1,9 @@
+# YAML usa indentação para representar hierarquia de nós.
+pessoa:
+    nome : Alice
+    idade : 32
+    peso : 66.5
+    matricula : null
+    # mas podemos também escrever representar nós em uma linha
+    dependentes : [Bruno, Carlos, Davi] # lista
+    endereco : { rua : dos bobos, numero : 0 } # mapeamento
