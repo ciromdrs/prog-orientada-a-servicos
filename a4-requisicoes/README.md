@@ -17,11 +17,31 @@ Há comentários explicando como a função funciona: *leia-os com atenção*.
 
 
 ## Como conferir suas respostas
-Execute (apenas uma vez) o servidor Laravel que está na pasta `a4-servidor` usando `php artisan serve`.
+Execute (apenas uma vez) o servidor Laravel que está na pasta `a4-servidor`:
+1. Instale as dependências:
+```
+composer install
+```
+
+2. Execute as migrações do banco de dados:
+```
+php artisan migrate
+```
+
+3. Crie a chave `APP_KEY`:
+```
+php artisan key:generate
+```
+
+4. Execute o servidor
+```
+php artisan serve
+```
 
 Com o servidor rodando, execute o script de testes usando `python3 a4_testes.py` quantas vezes forem necessárias.
 O script testará cada resposta e informará quais estão erradas e por quê.
-Também é possível especificar uma resposta a testar. Ex.: `python3 a4_testes.py Q4`.
+Também é possível especificar uma resposta a testar.
+Ex.: `python3 a4_testes.py Q4`.
 
 *ATENÇÃO:* Pelo fato de o script de testes enviar muitas requisições ao servidor, pode acontecer de o Laravel passar a rejeitá-las.
 Nesse caso, basta parar o servidor e reiniciá-lo.
