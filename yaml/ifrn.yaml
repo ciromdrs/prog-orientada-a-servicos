@@ -1,0 +1,10 @@
+nome: Instituto Federal de Educação, Ciência e Tecnologia do Rio Grande do Norte
+sigla: IFRN
+campi:
+    - nome: Campus Natal
+      endereco:
+        logradouro: Rua Dr. Nilo Bezerra Ramalho
+        numero: '1692' # Para pensar: por que usei aspas no número e CEP?
+        cep: '59015-300'
+        bairro: Tirol
+        cidade: Natal
