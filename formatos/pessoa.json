@@ -1,0 +1,10 @@
+{
+    "nome" : "Alice",
+    "idade" : 30,
+    "peso" : 70.5,
+    "dependentes" : [
+        "Bruno",
+        "Clara",
+        "Davi"
+    ]
+}

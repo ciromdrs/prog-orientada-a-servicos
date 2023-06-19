@@ -1,0 +1,10 @@
+<pessoa>
+    <nome>Alice</nome>
+    <idade>30</idade>
+    <peso>70.5</peso>
+    <dependentes>
+        <dependente>Bruno</dependente>
+        <dependente>Clara</dependente>
+        <dependente>Davi</dependente>
+    </dependentes>
+</pessoa>
