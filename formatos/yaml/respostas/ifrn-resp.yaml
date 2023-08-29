@@ -4,8 +4,8 @@ campi:
   - nome: Campus Natal
     endereco:
       logradouro: Rua Dr. Nilo Bezerra Ramalho
-      numero: "1692" # Para pensar: por que usei aspas no número e CEP?
-      cep: "59015-300"
+      numero: "1692" # Para pensar: por que usei aspas no número?
+      cep: 59015-300
       bairro: Tirol
       cidade: Natal
   - nome: Campus Caicó
@@ -13,7 +13,7 @@ campi:
       logradouro: Rodovia RN 288
       numero: s/n
       bairro: Nova Caicó
-      cep: "59300-000"
+      cep: 59300-000
       cidade: "Caicó"
 estatisticas:
     data_consulta: "2023-04-14T15:18:30-0300"

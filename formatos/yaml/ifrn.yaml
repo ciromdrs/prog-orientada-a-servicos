@@ -5,6 +5,6 @@ campi:
       endereco:
         logradouro: Rua Dr. Nilo Bezerra Ramalho
         numero: '1692' # Para pensar: por que usei aspas no número e CEP?
-        cep: '59015-300'
+        cep: 59015-300
         bairro: Tirol
         cidade: Natal
