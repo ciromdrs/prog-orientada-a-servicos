@@ -2,22 +2,21 @@
 (Adaptado da [Wikipédia](https://pt.wikipedia.org/wiki/YAML))
 
 YAML é um acrônimo recursivo para "YAML Ain’t Markup Language".
-YAML é uma linguagem de serialização de dados (assim como XML ou YAML), mas vai
-além disso.
-YAML foi construída com base na crença em que toda estrutura de dados pode ser
+YAML é uma linguagem de serialização de dados (assim como XML ou JSON).
+Foi construída com base na crença em que toda estrutura de dados pode ser
 representada adequadamente como uma combinação de listas, hashes (mapas) e dados
-escalares (valores simples).
+escalares (valores simples como inteiros e strings).
 
 
 ## Sintaxe Resumida
 
 A sintaxe é relativamente simples, porém mais complexa que YAML:
-1. Um documento YAML é estruturado por identação com espaços em branco
+1. Um documento YAML é estruturado por indentação com espaços em branco
    (caracteres de tabulação não são permitidos).
    Por convenção, *utilizaremos sempre dois espaços*.
 2. *Valores escalares* são a forma mais simples:
     - Tipos básicos: `123`, `3.14`, `true`, `null`.
-    - Strings não precisam de aspas, mas podem ser usadas tando duplas `"`
+    - Strings não precisam de aspas, mas podem ser usadas tanto duplas `"`
     como simples `'`.
 3. Membros de listas começam com traço _e um espaço_ `- `, e ocupam uma linha
 individual.
@@ -25,10 +24,13 @@ individual.
   os membros separados por vígula _e espaço_ `, `.
 4. Arrays associativos (ou mapas, hashes, dicionários, etc.) são representados
 na forma `chave: valor` (repare novamente no espaço depois dos dois pontos `:`).
-  Alternativamente, podem-se usar chaves `{ }`, como em YAML.
+  Alternativamente, podem-se usar chaves `{ }`, como em JSON.
 5. Comentários de final de linha são definidos por `#`.
 
-Observação: YAML exige que vírgulas e pontos sejam seguidos por um espaço em
+6. Não existe sintaxe YAML específica para timestamps. 
+Usa-se simplesmente uma string num formato válido, geralmente `YYYY-MM-DD` (data) + `THH:MM:SS` (hora) + `.XZ` (fuso horário). Ex.: `2001-12-15T02:59:43.1Z`.
+
+*Importante:* YAML exige que vírgulas e pontos sejam seguidos por um espaço em
 listas e arrays, para que valores escalares que contenham sinais de pontuação
 (como 5,280 ou http://www.wikipedia.org) possam ser representados sem a
 necessidade de aspas.

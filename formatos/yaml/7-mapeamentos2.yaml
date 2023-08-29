@@ -1,6 +1,6 @@
 # Teste isto em https://www.yamllint.com/
 chaves :
-    também podem ser bem mais complexas do que apenas uma : string.
+    também podem ser bem mais complexas do que : apenas uma string.
     exemplos:
         true : chave do tipo booleano
         123 : chave do tipo inteiro
