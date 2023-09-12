@@ -136,7 +136,7 @@ Você pode pular a seção correspondente a este assunto.
 
     final class EmailTest extends TestCase
     {
-        public function enderecosValidosProvider(): array
+        public static function enderecosValidosProvider(): array
         {
             return [
                 ['alice@exemplo.com'],
