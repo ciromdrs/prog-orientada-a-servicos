@@ -2,6 +2,13 @@
 Tutorial sobre testes de unidade com PHPUnit.
 Este tutorial é baseado em [Getting Started with PHPUnit 10](https://phpunit.de/getting-started/phpunit-10.html) e na [Documentação Oficial](https://docs.phpunit.de/en/10.3/).
 
+Notas:
+1. Os comandos apresentados neste tutorial são para o terminal Linux.
+Adapte-os ao seu sistema operacional.
+
+1. Até o momento da escrita deste tutorial (set/2023), os laboratórios não
+tinham o driver de cobertura de testes instalado.
+Você pode pular a seção correspondente a este assunto.
 
 ## Preparação
 1. Instale o PHPUnit via Composer:
@@ -149,7 +156,11 @@ Este tutorial é baseado em [Getting Started with PHPUnit 10](https://phpunit.de
     Execute novamente os testes.
 
 
-## Cobertura de testes
+## Cobertura de Testes
+Nota: Até o momento da escrita deste tutorial (set/2023), os laboratórios não
+tinham o driver de cobertura de testes instalado.
+Você pode pular esta seção.
+
 1. Execute os testes com um [relatório de cobertura](https://docs.phpunit.de/en/10.3/textui.html#code-coverage).
     ```bash
     ./vendor/bin/phpunit --coverage-text
@@ -231,6 +242,6 @@ Este tutorial é baseado em [Getting Started with PHPUnit 10](https://phpunit.de
 
 
 1. Substitua o atributo `endereco` da classe `Email` por dois atributos `usuario` e `dominio`.
-Os métodos `getEndereco`, `getUsuario` e `getDominio` devem ser alterado para passar nos testes.
+Os métodos `getEndereco`, `getUsuario` e `getDominio` devem ser alterados para passar nos testes.
 O construtor da classe `Email` e todos os testes de unidade devem permanecer intactos.
 
