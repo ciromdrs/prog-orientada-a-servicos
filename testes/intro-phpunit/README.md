@@ -10,6 +10,8 @@ Adapte-os ao seu sistema operacional.
 tinham o driver de cobertura de testes instalado.
 Você pode pular a seção correspondente a este assunto.
 
+1. Seções <mark>destacadas</mark> indicam alterações feitas no tutorial.
+
 ## Preparação
 1. Instale o PHPUnit via Composer:
     ```bash
@@ -120,7 +122,9 @@ Você pode pular a seção correspondente a este assunto.
         $email = new Email($endereco);
     }
     ```
-
+    <mark>Perceba que, diferentemente do teste anterior, aqui estamos esperando que o código lance uma exceção (`InvalidArgumentException`).
+    Para isto, antes de chamar o código que lança a exceção, avisamos ao PHPUnit que estamos esperando esta exceção (usando `$this->expectException`...).
+    Execute os testes novamente.</mark>
 
 ## DataProviders
 1. Um [DataProvider](https://docs.phpunit.de/en/10.3/attributes.html#data-provider) é uma função que fornece dados para um teste.
@@ -132,7 +136,7 @@ Você pode pular a seção correspondente a este assunto.
 
     final class EmailTest extends TestCase
     {
-        public function enderecosValidosProvider(): array
+        public static function enderecosValidosProvider(): array
         {
             return [
                 ['alice@exemplo.com'],
@@ -157,9 +161,11 @@ Você pode pular a seção correspondente a este assunto.
 
 
 ## Cobertura de Testes
-Nota: Até o momento da escrita deste tutorial (set/2023), os laboratórios não
-tinham o driver de cobertura de testes instalado.
-Você pode pular esta seção.
+<mark>
+    Nota: Até o momento da escrita deste tutorial (set/2023), os laboratórios não
+    tinham o driver de cobertura de testes instalado.
+    Você pode pular esta seção.
+</mark>
 
 1. Execute os testes com um [relatório de cobertura](https://docs.phpunit.de/en/10.3/textui.html#code-coverage).
     ```bash
@@ -199,7 +205,7 @@ Você pode pular esta seção.
 
     1. `getDominio`: Retorna a parte à direita do `"@"` de um endereço.
 
-    Crie testes para verificar a correção desses novos métodos.
+    Crie os testes <mark>`testGetUsuario` e `testGetDominio` na classe `EmailTest`</mark> para verificar a correção desses novos métodos.
 
 
 1. Atualmente, a função de validação de endereços de e-mail apenas verifica se a string contém um `"@"`.
@@ -213,14 +219,14 @@ Você pode pular esta seção.
     | `@dominio.com`             | Sem usuário |
     | `@`                        | Sem usuário nem domínio. |
     
-    1. Crie um DataProvider de e-mails inválidos com os valores acima.
+    1. Crie um DataProvider <mark>`enderecosInvalidosProvider`</mark> de e-mails inválidos com os valores acima.
 
     1. Altere a função de validação de endereços de e-mail para considerar os novos casos:
         1. Verifique se o endereço contém um `"@"`.
         1. Verifique se há um usuário à esquerda do `"@"`.
         1. Verifique se há um domínio à direita do `"@"`.
 
-    1. Considere agora as seguintes possibilidades:
+    1. Considere agora as seguintes possibilidades <mark>(adicione-as ao data provider criado no ponto anterior)</mark>:
         
         | E-mail nválido | Motivo |
         |-|-|
@@ -233,9 +239,13 @@ Você pode pular esta seção.
         | `usuario@domínio.com-`        | Hífen no final do domínio              |
         | `usuario@domínio!.com`        | Caracteres especiais no domínio        |
 
-        Como podemos ver, validação de e-mail é uma tarefa árdua.
+        <mark>
+            Neste momento, seu código deve estar falhando nos testes.
+            Isso acontece porque, como podemos ver, validação de e-mail é uma tarefa árdua.
+        </mark>
         Felizmente, o PHP tem uma função pronta para isso.
         Altere a condição de validação para:
+        
         ```php
         !filter_var($endereco, FILTER_VALIDATE_EMAIL)
         ```
@@ -243,5 +253,5 @@ Você pode pular esta seção.
 
 1. Substitua o atributo `endereco` da classe `Email` por dois atributos `usuario` e `dominio`.
 Os métodos `getEndereco`, `getUsuario` e `getDominio` devem ser alterados para passar nos testes.
-O construtor da classe `Email` e todos os testes de unidade devem permanecer intactos.
+O construtor da classe `Email` e todos os testes de unidade <mark>na classe `EmailTest`</mark> devem permanecer intactos.
 
