@@ -25,34 +25,7 @@ Crie sua aplicação em https://suap.ifrn.edu.br/api/ com as seguintes informaç
 
 	http://localhost:8000/dashboard
 
-### Instalando, Configurando e Rodando o Cliente SUAP Javascript
+### Execute o Cliente SUAP Javascript
+Escolha um dos servidores nos subdiretórios (atualmente `flask/` ou `laravel/`).
+Lá você encontrará informações específicas de como executá-lo.
 
-Considerando que você já tenha clonado o repositório **cliente_suap_javascript**. abra o terminal:
-
-	cd cliente_suap_javascript
-	cp settings.sample.js settings.js
-
-Faça os ajustes necessários, definindo a variável **CLIENT_ID**.
-
-É necessário rodar a aplicação cliente num servidor local. Você pode usar o Flask para isso:
-1. Crie e ative um ambiente virtual Python em um diretório de sua preferência.
-	```bash
-	python -m venv meuambiente
-	source meuambiente/bin/activate
-	```
-
-1. Vá para o diretório deste projeto (adapte o comando se necessário).
-	```bash
-	cd cliente_suap_javascript
-	```
-	
-1. Instale as dependências em `requirements.txt`
-	```bash
-	pip install requirements.txt
-	```
-1. Execute o app Flask:
-	```bash
-	flask --app app.py run --debug --port 8000
-	```
-
-Abra seu browser em http://localhost:8000/
