@@ -1,0 +1,119 @@
+openapi: '3.0.1'
+info:
+  title: Microblog
+  description: Aplicação de microblogging.
+    Um microblog é uma aplicação em que os autores escrevem textos curtos (geralmente limitados a 144 caracteres), chamados de publicações.
+    Geralmente publicações podem conter fotos ou vídeos e os usuários podem curtir e comentar publicações.
+    Nesta versão, não há cadastro de usuários nem suporte a fotos, vídeos, curtidas ou comentários.
+  version: '1.0'
+servers:
+  - url: http://{host}:{porta}/api/v1
+    variables:
+      host:
+        default: localhost
+      porta:
+        default: '8000'
+
+paths:
+  /publicacoes:
+    get:
+      summary: Retorna as publicações mais recentes.
+      responses:
+        '200':
+          description: 'OK'
+          content: 
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: '#/components/schemas/publicacao'
+    
+    post:
+      summary: Cria uma publicação.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                autor:
+                  $ref: '#/components/schemas/publicacao/properties/autor'
+                texto:
+                  $ref: '#/components/schemas/publicacao/properties/texto'
+
+      responses:
+        '201':
+          description: 'Criada.'
+          headers:
+            Location:
+              description: O URI da publicação criada.
+              schema:
+                type: string
+                example: /posts/123
+
+  /publicacoes/{id}:
+    get:
+      summary: Retorna uma publicação.
+      parameters:
+        - $ref: '#components/parameters/idPublicacao'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/publicacao'
+        404:
+          description: 'Publicação não encontrada.'
+
+    put:
+      summary: Altera uma publicação.
+      parameters:
+        - $ref: '#components/parameters/idPublicacao'
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Publicação não encontrada.'
+
+    delete:
+      summary: Apaga uma publicação.
+      parameters:
+        - $ref: '#components/parameters/idPublicacao'
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Publicação não encontrada.'
+
+
+components:
+  schemas:  
+    publicacao:
+      type: object
+      description: Uma publicação.
+      properties:
+        id:
+          type: string
+          description: Um identificador gerado pelo sistema.
+          example: 'sd93nk2S'
+        autor:
+          type: "string"
+          description: O nome de usuário do autor.
+          example: ciromdrs
+        texto:
+          type: string
+          maxLength: 144
+        criacao:
+          type: string
+          format: date-time
+
+  parameters:
+    idPublicacao:
+      schema:
+        $ref: '#components/publicacao/properties/id'
+      in: path
+      name: idPublicacao
+      required: true
