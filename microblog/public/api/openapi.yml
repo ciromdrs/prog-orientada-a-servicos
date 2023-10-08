@@ -1,0 +1,260 @@
+openapi: '3.0.1'
+info:
+  title: Microblog
+  description: Aplicação de microblogging.
+    Um microblog é uma aplicação em que os autores escrevem textos curtos (geralmente limitados a 144 caracteres), chamados de publicações.
+    Geralmente publicações podem conter fotos ou vídeos e os usuários podem curtir e comentar publicações.
+    Nesta versão, não há cadastro de usuários nem suporte a fotos, vídeos, curtidas ou comentários.
+  version: '1.1'
+servers:
+  - url: http://{host}:{porta}/api
+    variables:
+      host:
+        default: localhost
+      porta:
+        default: '8000'
+
+paths:
+  /publicacoes:
+    get:
+      operationId: getPublicacoes
+      summary: Retorna as publicações mais recentes.
+      responses:
+        '200':
+          description: 'OK'
+          content: 
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: '#/components/schemas/publicacao'
+    
+    post:
+      summary: Cria uma publicação.
+      operationId: postPublicacao
+      security:
+        - bearer: []
+        - oauth2: []
+      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                autor:
+                  $ref: '#/components/schemas/publicacao/properties/autor'
+                texto:
+                  $ref: '#/components/schemas/publicacao/properties/texto'
+      responses:
+        '201':
+          description: Publicação criada.
+          links:
+            getPublicacaoById:
+              description: O URI da publicação criada.
+              operationId: getPublicacao
+              parameters:
+                id: $response.header.location
+
+  /publicacoes/{id}:
+    get:
+      operationId: getPublicacao
+      summary: Retorna uma publicação.
+      parameters:
+        - $ref: '#components/parameters/idPublicacao'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/publicacao'
+        404:
+          description: 'Publicação não encontrada.'
+
+    put:
+      summary: Altera uma publicação.
+      parameters:
+        - $ref: '#components/parameters/idPublicacao'
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Publicação não encontrada.'
+
+    delete:
+      summary: Apaga uma publicação.
+      parameters:
+        - $ref: '#components/parameters/idPublicacao'
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Publicação não encontrada.'
+
+  /usuarios:
+    get:
+      summary: Retorna a lista de usuários cadastrados.
+      responses:
+        '200':
+          description: 'OK'
+          content: 
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: '#/components/schemas/usuario'
+
+    post:
+      summary: Cria um usuário.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/usuario"
+      responses:
+        "201":
+          description: Criado.
+        "400":
+          description: Faltou algum parâmetro.
+
+  /usuarios/{nome}:
+    parameters:
+      - nome:
+        $ref: "#/components/parameters/nome"
+
+    get:
+      summary: Retorna os dados de um usuário.
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/usuario'
+        '404':
+          description: Não encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/msg"
+    
+    put:
+      summary: Cria ou altera os dados de um usuário.
+      responses:
+        '200':
+          description: Alterou.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/msg"
+        '201':
+          description: Criou.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/msg"
+
+    delete:
+      summary: Apaga um usuário.
+      responses:
+        '200':
+          description: 'OK'
+        '404':
+          description: Não encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/msg"
+
+components:
+  schemas:  
+    publicacao:
+      type: object
+      description: Uma publicação.
+      properties:
+        id:
+          type: string
+          description: Um identificador gerado pelo sistema.
+          example: 'sd93nk2S'
+        autor:
+          type: "string"
+          description: O nome de usuário do autor.
+          example: ciromdrs
+        texto:
+          type: string
+          maxLength: 144
+        criacao:
+          type: string
+          format: date-time
+
+    usuario:
+      type: object
+      properties:
+        nome:
+          type: string
+          description: Nome usado como identificador.
+          example: alicex
+        nome_perfil: 
+          type: string
+          description: Nome legível, exibido, por exemplo, no perfil.
+          example: Alice Xavier
+
+    msg:
+      type: object
+      properties:
+        tipo:
+          type: string
+          enum: [info, erro]
+        conteudo:
+          type: string
+
+
+  responses:
+    200:
+      description: Ok.
+
+    201:
+      description: Recurso criado.
+
+    400:
+      description: Requisição inválida.
+    
+    404:
+      description: Recurso não encontrado.
+
+
+  parameters:
+    idPublicacao:
+      in: path
+      name: idPublicacao
+      required: true
+      schema:
+        $ref: '#components/publicacao/properties/id'
+  
+    nome:
+      in: path
+      name: nome
+      required: true
+      schema:
+        $ref: '#components/usuario/properties/nome'
+  
+
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+    oauth2:
+      type: oauth2
+      flows: 
+        implicit:
+          authorizationUrl: https://suap.ifrn.edu.br/api/v2/o/authorize/
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
