@@ -21,7 +21,7 @@ paths:
       summary: Acessar publicações
       responses:
         '200':
-          description: 'OK'
+          description: OK
           content: 
             application/json:
               schema:
@@ -61,13 +61,13 @@ paths:
       summary: Acessar publicação
       responses:
         200:
-          description: 'OK'
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#components/schemas/publicacao'
         404:
-          description: 'Publicação não encontrada.'
+          description: Publicação não encontrada.
 
     put:
       summary: Alterar publicação
@@ -83,17 +83,17 @@ paths:
                   $ref: '#/components/schemas/publicacao/properties/texto'
       responses:
         200:
-          description: 'OK'
+          description: OK
         404:
-          description: 'Publicação não encontrada.'
+          description: Publicação não encontrada.
 
     delete:
       summary: Apagar publicação
       responses:
         200:
-          description: 'OK'
+          description: OK
         404:
-          description: 'Publicação não encontrada.'
+          description: Publicação não encontrada.
 
 
 components:
