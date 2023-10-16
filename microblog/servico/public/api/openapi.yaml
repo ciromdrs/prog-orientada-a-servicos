@@ -49,15 +49,16 @@ paths:
           description: Publicação criada
 
   /publicacoes/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/publicacao/properties/id"
+  
     get:
       operationId: getPublicacao
       summary: Acessar publicação
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/publicacao/properties/id"
       responses:
         200:
           description: 'OK'
@@ -70,12 +71,16 @@ paths:
 
     put:
       summary: Alterar publicação
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/publicacao/properties/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                autor:
+                  $ref: '#/components/schemas/publicacao/properties/autor'
+                texto:
+                  $ref: '#/components/schemas/publicacao/properties/texto'
       responses:
         200:
           description: 'OK'
@@ -84,12 +89,6 @@ paths:
 
     delete:
       summary: Apagar publicação
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/publicacao/properties/id'
       responses:
         200:
           description: 'OK'
