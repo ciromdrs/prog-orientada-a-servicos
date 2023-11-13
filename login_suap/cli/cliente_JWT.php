@@ -17,12 +17,18 @@ $cliente_http = new Client(['cookies' => true]);
 
 # PROGRAMA PRINCIPAL
 
-
-$token = login_SUAP($usuario, $senha, $cliente_http);
+$token = '';
+try {
+    $token = login_SUAP($usuario, $senha, $cliente_http);
+} catch (GuzzleHttp\Exception\ClientException $e) {
+    print_r($e);
+    exit();
+}
 
 $dados = acessar_dados($token, $cliente_http);
 echo "Usuário Logado
 --------------
+Token de acesso: $token
 Nome: {$dados['nome_usual']}
 Matrícula: {$dados['matricula']}
 Vínculo: {$dados['tipo_vinculo']}
