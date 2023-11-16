@@ -76,4 +76,24 @@ class PublicacaoControllerTest extends TestCase
         
         $this->assertModelMissing($p);
     }
+
+    /**
+     * Testar alterar publicação.
+     *
+     * @return void
+     */
+    public function test_update()
+    {
+        $p = Publicacao::first();
+
+        $this->json(
+            'PUT',
+            route('publicacoes.update', [$p->id]),
+            ['texto' => 'Texto alterado']
+        );
+
+        $this->assertDatabaseHas('publicacoes',
+            ['id' => $p->id, 'texto' => 'Texto alterado']
+        );
+    }
 }

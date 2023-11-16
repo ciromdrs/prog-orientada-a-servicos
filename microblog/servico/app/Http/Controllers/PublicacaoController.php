@@ -48,10 +48,6 @@ class PublicacaoController extends Controller
 
 
     public function update(Request $request, $id) {
-        $request->validate([
-            'autor' => 'required',
-            'texto' => 'required|max:144',
-        ]);
 
         $p = Publicacao::find($id);
 
