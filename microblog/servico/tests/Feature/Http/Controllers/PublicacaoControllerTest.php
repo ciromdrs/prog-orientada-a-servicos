@@ -62,4 +62,18 @@ class PublicacaoControllerTest extends TestCase
         
         $response->assertJsonFragment($p->toArray());
     }
+
+    /**
+     * Testar apagar publicação.
+     *
+     * @return void
+     */
+    public function test_destroy()
+    {
+        $p = Publicacao::first();
+
+        $this->delete(route('publicacoes.destroy', [$p->id]));
+        
+        $this->assertModelMissing($p);
+    }
 }
