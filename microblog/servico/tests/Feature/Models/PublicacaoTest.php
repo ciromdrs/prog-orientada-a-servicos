@@ -31,6 +31,27 @@ class PublicacaoTest extends TestCase
 
 
     /**
+     * Testar se altera uma Publicacao.
+     *
+     * @return void
+     */
+    public function test_alterar()
+    {
+        $p = Publicacao::create([
+            'autor' => 'alice',
+            'texto' => 'Publicação teste.'
+        ]);
+        
+        $p->texto = 'Publicação alterada.';
+        $p->save();
+
+        $this->assertDatabaseHas('publicacoes',
+            ['autor' => 'alice', 'texto' => 'Publicação alterada.']
+        );
+    }
+
+
+    /**
      * Testar se apaga uma Publicacao.
      *
      * @return void
