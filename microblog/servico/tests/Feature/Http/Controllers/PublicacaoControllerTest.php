@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Models\Publicacao;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -45,5 +46,20 @@ class PublicacaoControllerTest extends TestCase
         );
         
         $response->assertStatus(201);
+    }
+
+
+    /**
+     * Testar exibir publicação.
+     *
+     * @return void
+     */
+    public function test_show()
+    {
+        $p = Publicacao::first();
+
+        $response = $this->get(route('publicacoes.show', [$p->id]));
+        
+        $response->assertJsonFragment($p->toArray());
     }
 }
