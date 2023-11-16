@@ -28,4 +28,21 @@ class PublicacaoTest extends TestCase
             ['autor' => 'alice', 'texto' => 'Publicação teste.']
         );
     }
+
+
+    /**
+     * Testar se apaga uma Publicacao.
+     *
+     * @return void
+     */
+    public function test_apagar() {
+        $p = Publicacao::create([
+            'autor' => 'alice',
+            'texto' => 'Publicação teste.'
+        ]);
+
+        $p->delete();
+
+        $this->assertModelMissing($p);
+    }
 }
