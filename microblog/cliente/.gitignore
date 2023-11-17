@@ -1,0 +1,9 @@
+credenciais.php
+
+/.phpunit.cache
+/vendor
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+/.vscode
