@@ -14,8 +14,6 @@ const OP_EXCLUIR = 'Excluir publicação';
 
 const OP_INVALIDA = 'Operação inválida';
 
-const LIMPA_TELA = "\033c";
-
 
 
 /* CLASSES */
@@ -33,7 +31,8 @@ class InterfaceMicroblog {
 
     public function menuPrincipal() {
         do {
-            echo LIMPA_TELA;
+            $this->limparTela();
+            
             $this->exibirTitulo();
         
             $publicacoes = $this->cliente_microblog->getPublicacoes();
@@ -61,6 +60,14 @@ class InterfaceMicroblog {
         } while ($operacao != OP_SAIR);
         
         $this->tchau();
+    }
+
+
+    /**
+     * Limpa a tela do terminal.
+     */
+    private function limparTela() {
+        echo "\033c";
     }
 
     
