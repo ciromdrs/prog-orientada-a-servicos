@@ -140,7 +140,7 @@ class InterfaceMicroblog {
 
 
     public function tchau() {
-        echo "Obrigado por usar o Microblog :)\n";
+        echo "\nObrigado por usar o Microblog :)\n\n";
     }
 }
 
