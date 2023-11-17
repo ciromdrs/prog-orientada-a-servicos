@@ -22,17 +22,24 @@ const OP_INVALIDA = 'Operação inválida';
  * Interface CLI para o Microblog.
  */
 class InterfaceMicroblog {
+
+    /**
+     * @param ClienteMicroblog cliente_microblog - Cliente da API do Microblog.
+     * @param string temp_msg - Uma mensagem temporária a ser exibida uma vez.
+     */
     public function __construct(
         private ClienteMicroblog $cliente_microblog,
         private string $temp_msg = ''
-    ) {
-    }
+    ) {}
 
 
+    /**
+     * Exibe o menu principal em loop.
+     */
     public function menuPrincipal() {
         do {
             $this->limparTela();
-            
+
             $this->exibirTitulo();
         
             $publicacoes = $this->cliente_microblog->getPublicacoes();
@@ -83,6 +90,11 @@ class InterfaceMicroblog {
     }
 
 
+    /**
+     * Exibe a lista de publicações.
+     * 
+     * @param array publicacoes - lista de publicações.
+     */
     public function exibirPublicacoes($publicacoes) {
         foreach ($publicacoes as $p) {
             echo "
@@ -93,6 +105,10 @@ class InterfaceMicroblog {
     }
     
     
+    /**
+     * Exibe a lista de operações disponíveis e retorna a que o usuário
+     * escolher.
+     */
     public function menuOperacoes(): string {
         echo "Operações:\n";
         $operacoes = [
@@ -115,6 +131,9 @@ class InterfaceMicroblog {
     }
 
 
+    /**
+     * Exibe menu para ler os dados de uma publicação a ser criada.
+     */
     public function menuEscreverPublicacao() {
         $p = [];
         $p['autor'] = readline('Escreva seu nome: ');
@@ -124,12 +143,18 @@ class InterfaceMicroblog {
     }
 
 
+    /**
+     * Exibe menu para ler o id de uma publicação a ser excluída.
+     */
     public function menuExcluirPublicacao() {
         $id = readline('Digite o # da publicação que você deseja excluir: ');
         return $id;
     }
 
 
+    /**
+     * Exibe uma mensagem temporária, que é apagada em seguida.
+     */
     public function exibirMensagemTemporaria() {
         if ($this->temp_msg != '') {
             echo "\n$this->temp_msg\n";
@@ -138,6 +163,10 @@ class InterfaceMicroblog {
     }
 
 
+    /**
+     * Exibe uma possível a mensagem de reposta de erro.
+     * Se não houver erro, nada é exibido.
+     */
     public function exibirErroNaResposta($resposta) {
         if ($resposta->getStatusCode() != 200) {
             $msg = json_decode($resposta->getBody());
@@ -146,6 +175,9 @@ class InterfaceMicroblog {
     }
 
 
+    /**
+     * Exibe uma mensagem de despedida.
+     */
     public function tchau() {
         echo "\nObrigado por usar o Microblog :)\n\n";
     }
