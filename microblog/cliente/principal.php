@@ -36,7 +36,7 @@ class InterfaceMicroblog {
             echo LIMPA_TELA;
             $this->exibirTitulo();
         
-            $publicacoes = $this->cliente_microblog->GET_publicacoes();
+            $publicacoes = $this->cliente_microblog->getPublicacoes();
             $this->exibirPublicacoes($publicacoes);
         
             $this->exibirMensagemTemporaria();
@@ -50,7 +50,12 @@ class InterfaceMicroblog {
                     break;
                 case OP_ESCREVER:
                     $p = $this->menuEscreverPublicacao();
-                    $this->cliente_microblog->POST_publicacoes($p);
+                    $this->cliente_microblog->criarPublicacao($p);
+                    break;
+                case OP_EXCLUIR:
+                    $id = $this->menuExcluirPublicacao();
+                    $resposta = $this->cliente_microblog->exluirPublicacao($id);
+                    $this->exibirErroNaResposta($resposta);
                     break;
             }
         } while ($operacao != OP_SAIR);
@@ -74,7 +79,7 @@ class InterfaceMicroblog {
     public function exibirPublicacoes($publicacoes) {
         foreach ($publicacoes as $p) {
             echo "
-            \r$p->autor em $p->created_at escreveu:
+            \r#$p->id $p->autor em $p->created_at escreveu:
             \r\"$p->texto\"
             \r";
         }
@@ -112,10 +117,24 @@ class InterfaceMicroblog {
     }
 
 
+    public function menuExcluirPublicacao() {
+        $id = readline('Digite o # da publicação que você deseja excluir: ');
+        return $id;
+    }
+
+
     public function exibirMensagemTemporaria() {
         if ($this->temp_msg != '') {
             echo "\n$this->temp_msg\n";
             $this->temp_msg = '';
+        }
+    }
+
+
+    public function exibirErroNaResposta($resposta) {
+        if ($resposta->getStatusCode() != 200) {
+            $msg = json_decode($resposta->getBody());
+            $this->temp_msg = "[$msg->tipo] $msg->conteudo";
         }
     }
 
