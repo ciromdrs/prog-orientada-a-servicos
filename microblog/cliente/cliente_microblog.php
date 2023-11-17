@@ -5,9 +5,11 @@ require 'vendor/autoload.php';
 use GuzzleHttp\Client as GuzzleClient;
 
 class ClienteMicroblog {
-    public function __construct(string $url_servico) {
-        $this->url_api = $url_servico;
-        $this->http_client = new GuzzleClient(['base_uri' => $this->url_api]);
+    private GuzzleClient $http_client;
+
+
+    public function __construct(private string $url_servico) {
+        $this->http_client = new GuzzleClient(['base_uri' => $this->url_servico]);
     }
 
 
@@ -15,5 +17,14 @@ class ClienteMicroblog {
         $resposta = $this->http_client->request("GET", 'publicacoes');
         $publicacoes = json_decode($resposta->getBody());
         return $publicacoes;
+    }
+
+    
+    public function POST_publicacoes($p) {
+        $resposta = $this->http_client->post(
+            'publicacoes',
+            ['json' => $p]
+        );
+        return $resposta;
     }
 }
