@@ -33,6 +33,9 @@ paths:
     post:
       summary: Criar publicação
       operationId: postPublicacao
+      security:
+        - bearer: []
+      
       requestBody:
         required: true
         content:
@@ -125,3 +128,9 @@ components:
           enum: [info, erro]
         conteudo:
           type: string
+
+  securitySchemes:
+    bearer: # Apelido para o esquema de segurança
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
