@@ -14,14 +14,6 @@ class PublicacaoController extends Controller
 
 
     public function store(Request $request) {
-        $token = $request->bearerToken();
-        if (empty($token)) {
-            return response()->json([
-                'tipo' => 'erro',
-                'conteudo' => 'Não autorizado'
-            ], 401);
-        }
-        
         $request->validate([
             'autor' => 'required',
             'texto' => 'required|max:144',

@@ -74,6 +74,8 @@ paths:
 
     put:
       summary: Alterar publicação
+      security:
+        - bearer: []
       requestBody:
         content:
           application/json:
@@ -92,6 +94,8 @@ paths:
 
     delete:
       summary: Apagar publicação
+      security:
+        - bearer: []
       responses:
         200:
           description: OK

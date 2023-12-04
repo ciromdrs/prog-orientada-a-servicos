@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PublicacaoController;
+use App\Http\Middleware\VerificarTokenSUAP;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +21,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::resource('publicacoes', PublicacaoController::class);
+Route::name('publicacoes.')
+    ->prefix('/publicacoes')
+    ->controller(PublicacaoController::class)
+    ->group(function() {
+        # Operações públicas
+        Route::name('index')->get('', 'index');
+        Route::name('show')->get('/{id}', 'show');
+    })
+    ->group(function () {
+        # Operações restritas
+        Route::middleware(VerificarTokenSUAP::class)
+            ->group(function () {
+                Route::name('store')->post('', 'store');
+                Route::name('update')->put('/{id}', 'update');
+                Route::name('destroy')->delete('/{id}', 'destroy');
+            });
+    });
