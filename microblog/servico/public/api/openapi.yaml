@@ -43,8 +43,6 @@ paths:
             schema:
               type: object
               properties:
-                autor:
-                  $ref: '#/components/schemas/publicacao/properties/autor'
                 texto:
                   $ref: '#/components/schemas/publicacao/properties/texto'
       responses:
@@ -82,8 +80,6 @@ paths:
             schema:
               type: object
               properties:
-                autor:
-                  $ref: '#/components/schemas/publicacao/properties/autor'
                 texto:
                   $ref: '#/components/schemas/publicacao/properties/texto'
       responses:
