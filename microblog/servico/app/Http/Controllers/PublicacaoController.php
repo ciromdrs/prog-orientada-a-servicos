@@ -15,11 +15,15 @@ class PublicacaoController extends Controller
 
     public function store(Request $request) {
         $request->validate([
-            'autor' => 'required',
             'texto' => 'required|max:144',
         ]);
 
-        Publicacao::create($request->all());
+        $dados = [
+            'autor' => $request->attributes->get('usuario')['nome'],
+            'texto' => $request->get('texto'),
+        ];
+
+        Publicacao::create($dados);
         
         return response()->json(
             [
