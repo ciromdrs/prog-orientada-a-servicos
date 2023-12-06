@@ -82,7 +82,6 @@ class VerificarTokenSUAP
         );
 
         $dados = [
-            'suap_token' => $suap_token,
             'nome' => $res['nome_usual'],
             'matricula' => $res['matricula']
             # Poderia retornar mais dados aqui
