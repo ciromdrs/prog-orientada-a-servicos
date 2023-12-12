@@ -6,10 +6,14 @@ Cada elemento tem um índice associado a ele.
 |-|-|-|-|-|-|-|-|-|
 elemento | 14 | 2 | 11 | 8 | 55 | 7 | 9 | 0 |
 
+
+
 ## Operações
+
+
 ### Acessar Elemento - O(1)
 Dado um índice `i`, o acesso ao elemento correspondente ocorre em tempo constante, ou seja O(1).
-Para saber em qual região de memória está o elemento de índice `i`, basta multiplicar `i * s`, onde `s` é o tamanho de cada elemento.
+Para saber em qual região de memória está o elemento de índice `i`, o compilador multiplica `i * s`, onde `s` é o tamanho de cada elemento.
 
 Ex.: Assumindo que um inteiro é representado com 4 bytes de memória (32 bits), e que a variável `vetor` _aponta para_ o endereço de memória `100`, `vetor[3]` corresponde a:
 
@@ -21,10 +25,23 @@ elemento = posicao do vetor + i * tamanho de um int
 
 Considerando uma máquina moderna comum, que possui memória RAM de acesso instantâneo a qualquer posição, basta ler o valor da posição `112` da memória e obteremos o valor `55`.
 
+
 ### Buscar elemento - O(n)
 A busca em vetores é feita sequencialmente.
 Verifica-se primeiro o elemento de índice `0`, depois o de índice `1, 2, 3, ...`.
 Isso resulta em uma complexidade de busca linear com relação ao tamanho do vetor, ou seja O(n).
+Ex.:
+```go
+buscar(vetor, elemento) {
+    for i = 0; i < count(vetor); i++ {
+        if vetor[i] == elemento {
+            return i
+        }
+    }
+    return -1 // O índice negativo indica que não encontrou
+}
+```
+
 
 ### Inserir elemento - O(n)
 Por ser uma estrutura que armazena elementos na memória de maneira sequencial, a inserção em vetores pode ser custosa, dependendo do caso.
@@ -48,7 +65,7 @@ elemento | 14 | 2 | 11 | 8 | 55 | **7** | x | x |
 #### Caso 2
 Porém, se não houver mais posições vazias, é necessário alocar espaço na memória para um vetor maior, copiar todos os elementos do vetor antigo e inserir o novo elemento lá.
 
-Ex: dado o vetor abaixo, se quisermos inserir o elemento `28`, teremos:
+Ex.: dado o vetor abaixo, se quisermos inserir o elemento `28`, teremos:
 
 Vetor original:
 índice   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
