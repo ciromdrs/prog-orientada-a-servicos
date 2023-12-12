@@ -77,6 +77,22 @@ E em todos os casos precisamos fazer uma quantidade de operações proporcional 
  
 
 ### Excluir elemento - O(n)
+Há algumas alternativas para excluir elementos de um vetor.
+Vamos abordar a mais simples.
+Dado um índice `i`, precisamos deslocar para a esquerda (em direção aos índices menores) todo o conteúdo do vetor a partir de `i+1` e diminuir o contador de elementos do vetor.
+
+Ex.: dado o vetor abaixo, se quisermos remover o elemento `55`, teremos:
+
+Vetor original:
+índice   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|-|-|-|-|-|-|-|-|-|
+elemento | 14 | 2 | 11 | 8 | 55 | 7 | 9 | 0 |
+deslocamento | | | | | | <- | <- | <- |
+
+Mesmo vetor, com elementos deslocados para a esquerda:
+índice   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|-|-|-|-|-|-|-|-|-|
+elemento | 14 | 2 | 11 | 8 | 7 | 9 | 0 | x |
 
 
 ## Implementação
