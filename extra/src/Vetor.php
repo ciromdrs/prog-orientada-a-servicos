@@ -11,15 +11,9 @@ class Vetor {
 	 */
 	private $dados = [];
 
-	/**
-	 * Quantidade de elementos salvos no vetor.
-	 */
-	public $tamanho = 0;
+	private $tamanho = 0;
 
-	/**
-	 * Quantidade de espaço alocado, em número de elementos.
-	 */
-	public $alocado = 0;
+	private $alocado = 0;
 
 	public function __construct($elementos=[])
 	{
@@ -108,6 +102,9 @@ class Vetor {
 		return false;
 	}
 
+	/**
+	 * @return int Retorna a quantidade de elementos salvos no vetor.
+	 */
 	public function tamanho(): int {
 		return $this->tamanho;
 	}
@@ -120,6 +117,9 @@ class Vetor {
 		return $this->alocado - $this->tamanho;
 	}
 
+	/**
+	 * @return int Retorna a quantidade de espaço alocado, em número de elementos.
+	 */
 	public function alocado(): int {
 		return $this->alocado;
 	}
