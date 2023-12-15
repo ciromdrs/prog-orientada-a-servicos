@@ -5,7 +5,8 @@
  * Vetor (ou Array) capaz de armazenar e recuperar valores inteiros
  * não-negativos.
  */
-class Vetor {
+class Vetor
+{
 	/**
 	 * Array que armazena os elementos e o espaço livre.
 	 */
@@ -15,7 +16,7 @@ class Vetor {
 
 	private $alocado = 0;
 
-	public function __construct($elementos=[])
+	public function __construct($elementos = [])
 	{
 		$this->dados = $elementos;
 		$this->tamanho = count($elementos);
@@ -34,6 +35,7 @@ class Vetor {
 		return array_slice($this->dados, 0, $this->tamanho);
 	}
 
+
 	/**
 	 * Busca um $elemento no vetor.
 	 * 
@@ -41,8 +43,9 @@ class Vetor {
 	 * @return int o índice do elemento no vetor ou -1, se o elemento não for
 	 * encontrado.
 	 */
-	public function buscar(int $elemento): int {
-		for ($i = 0; $i<count($this->dados); $i++) {
+	public function buscar(int $elemento): int
+	{
+		for ($i = 0; $i < count($this->dados); $i++) {
 			if ($this->dados[$i] == $elemento) {
 				return $i;
 			}
@@ -50,12 +53,14 @@ class Vetor {
 		return -1;
 	}
 
+
 	/**
 	 * Insere o $elemento no vetor.
 	 * 
 	 * @param int $elemento o elemento a ser inserido.
 	 */
-	public function inserir(int $elemento) {
+	public function inserir(int $elemento)
+	{
 		# Se não houver espaço livre
 		if ($this->livre() <= 0) {
 			# Cria um novo array com o dobro de tamanho alocado
@@ -74,8 +79,8 @@ class Vetor {
 			$this->alocado = $dobro;
 
 			/* Em linguagens de programação sem coletor de lixo, precisaríamos
-			liberar a memória alocada para o vetor antigo aqui, mas o PHP faz
-			isso pra nós. */
+			   liberar a memória alocada para o vetor antigo aqui, mas o PHP faz
+			   isso pra nós. */
 		}
 		# Guarda o novo elemento no final
 		$this->dados[$this->tamanho] = $elemento;
@@ -92,7 +97,8 @@ class Vetor {
 	 * @return bool true se o elemento foi encontrado e excluído ou false, caso
 	 * contrário.
 	 */
-	public function excluir(int $elemento): bool {
+	public function excluir(int $elemento): bool
+	{
 		$i = $this->buscar($elemento);
 		if (($i >= 0) && ($i < $this->tamanho)) {
 			array_splice($this->dados, $i, length: 1);
@@ -102,25 +108,31 @@ class Vetor {
 		return false;
 	}
 
+
 	/**
 	 * @return int Retorna a quantidade de elementos salvos no vetor.
 	 */
-	public function tamanho(): int {
+	public function tamanho(): int
+	{
 		return $this->tamanho;
 	}
 
+	
 	/**
 	 * @return int Retorna a quantidade de elementos que cabem no vetor sem a
 	 * necessidade de redimensioná-lo, isto é, o espaço alocado livre.
 	 */
-	public function livre(): int {
+	public function livre(): int
+	{
 		return $this->alocado - $this->tamanho;
 	}
+
 
 	/**
 	 * @return int Retorna a quantidade de espaço alocado, em número de elementos.
 	 */
-	public function alocado(): int {
+	public function alocado(): int
+	{
 		return $this->alocado;
 	}
 }
