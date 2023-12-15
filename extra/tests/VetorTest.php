@@ -45,13 +45,14 @@ final class VetorTest extends TestCase
         $this->assertContains(4, $v->elementos);
     }
 
-    public function test_excuir_existente(): void
+    public function test_excluir_existente(): void
     {
         $v = new Vetor([1,2,3]);
 
-        $v->excluir(2);
+        $excluiu = $v->excluir(2);
 
-        $this->assertEquals(2, $v->tamanho);
+        $this->assertEquals($excluiu, true);
         $this->assertEquals([1,3], $v->elementos);
-        }
+    }
+
 }
