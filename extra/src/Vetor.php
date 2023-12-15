@@ -78,6 +78,10 @@ class Vetor {
 			$this->dados = $novo;
 			# Atualiza o tamanho alocado
 			$this->alocado = $dobro;
+
+			/* Em linguagens de programação sem coletor de lixo, precisaríamos
+			liberar a memória alocada para o vetor antigo aqui, mas o PHP faz
+			isso pra nós. */
 		}
 		# Guarda o novo elemento no final
 		$this->dados[$this->tamanho] = $elemento;
