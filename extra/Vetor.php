@@ -6,7 +6,6 @@
  * não-negativos.
  */
 class Vetor {
-
 	/**
 	 * Array que armazena os dados.
 	 */
@@ -26,5 +25,36 @@ class Vetor {
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * Insere o $valor no vetor.
+	 * 
+	 * @param int $valor o valor a ser inserido.
+	 */
+	public function inserir(int $valor) {
+		/* Estamos usando o array pronto do PHP, que cuida da alocação de
+		memória automaticamente. Em outras linguagens de programação, teríamos
+		que gerenciar a memória manualmente. 
+		Isso dificulta nosso trabalho, mas dá mais controle sobre a memória. */
+		$this->dados[] = $valor;
+	}
+
+
+	/**
+	 * Exclui um valor do vetor.
+	 * 
+	 * @param int $valor o valor a ser excluído.
+	 * 
+	 * @return bool true se o valor foi encontrado e excluído ou false, caso
+	 * contrário.
+	 */
+	public function excluir(int $valor): bool {
+		$i = $this->buscar($valor);
+		if ($i >= 0) {
+			unset($this->dados[$i]);
+			return true;
+		}
+		return false;
 	}
 }
