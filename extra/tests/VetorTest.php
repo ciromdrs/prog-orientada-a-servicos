@@ -79,4 +79,22 @@ final class VetorTest extends TestCase
 
         $this->assertEquals([1, 2, 3], $v->elementos());
     }
+
+    public function test_buscar_existente(): void
+    {
+        $v = new Vetor([1,2,3]);
+
+        $i = $v->buscar(3);
+
+        $this->assertEquals($i, 2);
+    }
+
+    public function test_buscar_inexistente(): void
+    {
+        $v = new Vetor([1,2,3]);
+
+        $i = $v->buscar(50);
+
+        $this->assertEquals($i, -1);
+    }
 }
