@@ -19,10 +19,8 @@ final class VetorTest extends TestCase
 
         $this->assertEquals($v->elementos(), $elementos);
         $this->assertEquals(4, $v->tamanho());
-        # O assertGreaterThanOrEqual deixa em aberto a possibilidade de
-        # prealocar memória
-        $this->assertGreaterThanOrEqual(4, $v->alocado());
-        $this->assertGreaterThanOrEqual($v->alocado() - $v->tamanho(), $v->livre());
+        $this->assertEquals(4, $v->alocado());
+        $this->assertEquals(0, $v->livre());
     }
 
     public function test_insere_em_vetor_vazio(): void
@@ -34,9 +32,7 @@ final class VetorTest extends TestCase
 
         $this->assertEquals([$x], $v->elementos());
         $this->assertEquals(1, $v->tamanho());
-        # O assertGreaterThanOrEqual deixa em aberto a possibilidade de alocar
-        # memória
-        $this->assertGreaterThan(0, $v->alocado());
+        $this->assertEquals(1, $v->alocado());
         $this->assertEquals(0, $v->livre());
     }
 
@@ -48,6 +44,9 @@ final class VetorTest extends TestCase
         $v->inserir(4);
 
         $this->assertEquals(array_merge($elementos, [4]), $v->elementos());
+        $this->assertEquals(4, $v->tamanho());
+        $this->assertEquals(6, $v->alocado());
+        $this->assertEquals(2, $v->livre());
     }
 
     public function test_excluir_existente(): void
