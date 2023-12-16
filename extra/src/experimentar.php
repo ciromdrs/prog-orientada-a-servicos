@@ -22,13 +22,13 @@ $incremento = 100000;
 $ate = $incremento * 10;
 
 # Executa os experimentos
-expInserir($classe, 0, $ate, $incremento, 10);
+exp_inserir($classe, 0, $ate, $incremento, 10);
 
 
 /**
  * Experimento de inserção.
  */
-function expInserir($classe, int $de, int $ate, int $incremento, int $repeticoes)
+function exp_inserir($classe, int $de, int $ate, int $incremento, int $repeticoes)
 {
     # Identificação do experimento
     echo "$classe.inserir\t$de\t$ate\t$incremento\t$repeticoes\n";
