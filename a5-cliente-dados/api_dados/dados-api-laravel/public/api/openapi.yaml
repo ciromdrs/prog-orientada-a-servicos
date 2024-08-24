@@ -1,0 +1,192 @@
+openapi: '3.0.1'
+info:
+  title: API Dados
+  description: 'API simplificada para armazenamento de objetos como pares chave-valor em bancos, semelhante ao serviço S3 da AWS.
+
+    É necessário instalar algumas bibliotecas e drivers PHP:
+    ```
+    sudo apt install php-mbstring
+    ```'
+
+  version: '1.1'
+servers:
+  - url: http://{host}:{porta}/api
+    variables:
+      host:
+        default: localhost
+      porta:
+        default: '8000'
+
+paths:
+  /bancos:
+    get:
+      summary: Acessar bancos.
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: '#/components/schemas/banco'
+
+  /bancos/{banco}:
+    parameters:
+      - name: banco
+        in: path
+        required: true
+        schema:
+          type: string
+  
+    get:
+      summary: Acessar banco.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/banco'
+        404:
+          description: Banco não encontrado.
+
+    put:
+      summary: Criar banco.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  type: string
+      responses:
+        201:
+          description: Banco criado.
+
+    delete:
+      summary: Apagar banco.
+      responses:
+        200:
+          description: OK
+        404:
+          description: Banco não encontrado.
+    
+    post:
+      summary: Adicionar objeto ao banco.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  type: string
+                valor:
+                  type: string
+      responses:
+        201:
+          description: Criado.
+        404:
+          description: Banco não encontrado.
+
+  /bancos/{banco}/{objeto}:
+    parameters:
+      - name: banco
+        description: O nome do banco.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: objeto
+        description: A chave do objeto a ser acessado.
+        in: path
+        required: true
+        schema:
+          type: string
+
+    get:
+      summary: Acessar objeto no banco.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/banco'
+        404:
+          description: Banco não encontrado.
+      
+    put:
+      summary: Criar ou atualizar objeto no banco.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  type: string
+                valor:
+                  type: string
+      responses:
+        200:
+          description: Atualizado.
+        201:
+          description: Criado.
+        404:
+          description: Banco não encontrado.
+      
+    delete:
+      summary: Apagar objeto no banco.
+      responses:
+        200:
+          description: OK
+        404:
+          description: Banco ou objeto não encontrado.
+
+components:
+  schemas:  
+    banco:
+      type: object
+      description: Uma banco para armazenar objetos.
+      properties:
+        id:
+          type: integer
+          description: Um id gerado automaticamente pelo serviço.
+          example: 123
+        nome:
+          type: string
+          description: O nome do banco.
+          example: bloco_de_notas
+        usuario:
+          type: string
+          description: O nome do usuário que criou o banco.
+          maxLength: 144
+    
+    objeto:
+      type: object
+      description: Um objeto representando um par chave-valor.
+      properties:
+        chave:
+          type: string
+          description: Uma chave única dentro deste banco.
+          example: primeira-nota
+        nome:
+          type: string
+          description: O nome do banco.
+          example: bloco_de_notas
+        usuario:
+          type: string
+          description: O nome do usuário que criou a nota.
+          maxLength: 144
+        texto:
+          type: string
+          description: O texto da nota.
+          maxLength: 144
+          example: Minha primeira nota!
