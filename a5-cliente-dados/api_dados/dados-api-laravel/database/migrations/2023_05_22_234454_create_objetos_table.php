@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('chave');
             $table->string('valor');
             $table->string('usuario');
-            $table->string('balde');
-            $table->unique('chave', 'balde');
+            $table->string('banco');
+            $table->unique('chave', 'banco');
         });
     }
 

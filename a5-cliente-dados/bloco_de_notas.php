@@ -1,78 +1,23 @@
 <?php
 
 
-// Verificação do comando
-if (sizeof($argv) != 2) {
-    echo "Uso: php {$argv[0]} <endereco-servico-dados>\n";
-    exit(1);
-}
-
-
-
-// CONSTANTES E VARIÁVEIS GLOBAIS
-
+// CONSTANTES
 
 // Opções de menus
 const OPCAO_SAIR = '0';
 const OPCAO_CRIAR = '1';
 const OPCAO_APAGAR = '2';
 
-// URL do serviço de dados
-$url_servico_dados = $argv[1];
 
-// Mensagem para o usuário
-$mensagem = '';
+// FUNÇÕES
 
-// INICIALIZAÇÃO
+// Menus
 
-
-// Obtém as URLs do serviço de dados
-$urls = req_GET_urls($url_servico_dados);
-if ($urls == NULL) {
-    echo "Erro obtendo URLs.\n";
-    exit(1);
-}
-
-
-// Verifica se o balde 'notas' existe, usando uma requisição HEAD
-$resp = req_HEAD_balde_notas();
-if ($resp['codigo'] == 404) {
-    # Balde das notas não existe. É preciso criar.
-    $resp = req_PUT_balde_notas();
-
-    // Se não deu certo criar o balde, aborta
-    if ($resp['codigo'] != 201) {
-        echo "Erro ao criar balde de notas.\n";
-        echo "Erro {$resp['codigo']}: {$resp['corpo']}\n";
-        exit(1);
-    }
-}
-
-
-// Laço principal do programa
-do {
-    $opcao = menu_principal();
-    switch ($opcao) {
-        case OPCAO_CRIAR:
-            menu_criar();
-            break;
-        case OPCAO_APAGAR:
-            menu_apagar();
-            break;
-    }
-}
-while($opcao != OPCAO_SAIR);
-
-
-
-// MENUS
-
-
-function menu_principal() {
-    global $urls, $mensagem;
+function menu_principal(string $uri_servico_dados) {
+    global $mensagem;
 
     // Acessa as notas cadastradas
-    $notas = req_GET_notas();
+    $notas = req_GET_notas($uri_servico_dados);
 
     // Exibe a interface
     echo "\n=============== BLOCO DE NOTAS ===============\n";
@@ -95,8 +40,7 @@ function menu_principal() {
     return $opcao;
 }
 
-
-function menu_criar() {
+function menu_criar(string $uri_servico_dados) {
     global $mensagem;
 
     // Recebe o texto da nota
@@ -104,16 +48,17 @@ function menu_criar() {
     $texto = readline();
 
     // Envia a requisição ao serviço de dados
-    $resp = req_POST_nota($texto);
+    $resp = req_POST_nota($texto, $uri_servico_dados);
 
     // Exibe possível mensagem de erro
     if ($resp['codigo'] != 201) {
         $mensagem = "Erro {$resp['codigo']} ao criar nota.\n" . $resp["corpo"];
+    } else {
+        var_dump($resp['corpo']);
     }
 }
 
-
-function menu_apagar() {
+function menu_apagar(string $uri_servico_dados) {
     global $mensagem;
 
     // Recebe a chave da nota
@@ -121,7 +66,7 @@ function menu_apagar() {
     $chave = readline();
 
     // Envia a requisição DELETE ao serviço de dados
-    $resp = req_DELETE_nota($chave);
+    $resp = req_DELETE_nota($chave, $uri_servico_dados);
 
     // Exibe possível mensagem de erro
     if ($resp['codigo'] != 200) {
@@ -130,25 +75,25 @@ function menu_apagar() {
     }
 }
 
-
-
-// REQUISIÇÕES
+// Requisições
 
 /**
- * Função genérica para enviar requisições usando a extensão cURL para PHP.
+ * Função genérica para enviar requisições usando a extensão curl para PHP.
+ * 
+ * @return array Resposta contendo as chaves 'codigo', 'corpo', 'cabecalhos' e 'erro'.
  */
-function enviar_requisicao($url, $metodo = 'GET', $corpo = '',
-    $cabecalhos = [], $curl_options = []) {
+function enviar_requisicao(string $uri, string $metodo = 'GET', string $corpo = '',
+    array $cabecalhos = [], array $curl_options = []): array  {
     // Cria um array para guardar as informações da resposta
     $resposta = [];
 
     // Inicializa o canal de comunicação
-    $ch = curl_init($url);
+    $ch = curl_init($uri);
 
-    // Esta opção configura o cURL para retornar o valor da resposta, em vez de
+    // Esta opção configura o curl para retornar o valor da resposta, em vez de
     // apenas exibí-lo na tela.
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    // Esta opção configura o cURL para preservar os cabeçalhos na resposta, em
+    // Esta opção configura o curl para preservar os cabeçalhos na resposta, em
     // vez de descartá-los.
     curl_setopt($ch, CURLOPT_HEADER, 1);
     // Esta opção configura o método HTTP. Se ela não for atribuída, o método
@@ -185,12 +130,14 @@ function enviar_requisicao($url, $metodo = 'GET', $corpo = '',
     return $resposta;
 }
 
-function req_GET_notas() {
-    global $urls;
-    $resp = enviar_requisicao(
-        _url('balde', [['{balde}', 'notas']])
-    );
-    // Se não deu certo criar o balde, aborta
+/**
+ * Acessa as notas salvas.
+ * 
+ * @return array A lista de notas salvas.
+ */
+function req_GET_notas(string $uri_servico_dados): array {
+    $resp = enviar_requisicao("$uri_servico_dados/bancos/notas");
+    // Se não deu certo criar o banco, aborta
     if ($resp['codigo'] != 200) {
         echo "Erro obtendo notas.\n";
         echo "Erro {$resp['codigo']}: {$resp['corpo']}";
@@ -201,36 +148,41 @@ function req_GET_notas() {
 }
 
 
-function req_GET_urls($url_servico) {
-    $resp = enviar_requisicao($url_servico);
-    $urls = json_decode($resp['corpo'],
-                        $associative = true, // Retorna um array em vez de um
-                                             // objeto padrão.
-                        flags : JSON_THROW_ON_ERROR); // Lança exceções em
-                                                      // caso de erro.
-    return $urls;
-}
-
-
-function req_DELETE_nota($chave) {
-    return enviar_requisicao(
-        _url('objeto', [['{balde}','notas'], ['{chave}', $chave]]),
+/**
+ * Apaga uma nota no banco.
+ * 
+ * @param chave A chave da nota a apagar.
+ * 
+ * @return array Resposta da função `enviar_requisicao`.
+ */
+function req_DELETE_nota(string $chave, string $uri_servico_dados): array {
+    return enviar_requisicao("$uri_servico_dados/bancos/notas/$chave",
         metodo: 'DELETE'
     );
 }
 
-
-function req_HEAD_balde_notas() {
+/**
+ * Envia uma requisição HEAD para o URI do banco `'notas'`.
+ * 
+ * É usada para verificar se o banco existe.
+ * 
+ * @return array Resposta da função `enviar_requisicao`.
+ */
+function req_HEAD_banco_notas(string $uri_servico_dados): array {
     return enviar_requisicao(
-        _url('balde', [['{balde}', 'notas']]),
+        "$uri_servico_dados/bancos/notas",
         metodo: 'HEAD'
-        );
+    );
 }
 
-
-function req_PUT_balde_notas() {
+/**
+ * Envia uma requisição PUT para criar o banco `'notas'`.
+ * 
+ * @return array Resposta da função `enviar_requisicao`.
+ */
+function req_PUT_banco_notas(string $uri_servico_dados): array {
     return enviar_requisicao(
-        _url('balde', [['{balde}', 'notas']]),
+        "$uri_servico_dados/bancos/notas",
         metodo: 'PUT',
         cabecalhos: ['Content-Type: application/json'],
         corpo: json_encode([
@@ -240,10 +192,16 @@ function req_PUT_balde_notas() {
     );
 }
 
-
-function req_POST_nota($texto) {
+/**
+ * Envia uma requisição POST para apagar uma nota.
+ * 
+ * @param texto O texto da nota.
+ * 
+ * @return array Resposta da função `enviar_requisicao`.
+ */
+function req_POST_nota(string $texto, string $uri_servico_dados): array {
     return enviar_requisicao(
-        _url('balde', [['{balde}', 'notas']]),
+        "$uri_servico_dados/bancos/notas",
         metodo: 'POST',
         cabecalhos: ['Content-Type: application/json'],
         corpo: json_encode([
@@ -254,19 +212,45 @@ function req_POST_nota($texto) {
 }
 
 
+// PROGRAMA PRINCIPAL
 
-// FUNÇÕES AUXILIARES
-
-
-/**
- * Retorna um URL após aplicar as substituições dadas.
- */
-function _url(string $url_key, array $substituicoes = []) {
-    global $url_servico_dados, $urls;
-    $url = $url_servico_dados;
-    $url .= $urls[$url_key];
-    foreach ($substituicoes as [$var, $val]) {
-        $url = str_replace($var, $val, $url);
-    }
-    return $url;
+// Verificação do comando
+if (sizeof($argv) != 2) {
+    echo "Uso: php {$argv[0]} <endereco-servico-dados>\n";
+    exit(1);
 }
+
+// Inicialização
+
+// URI do serviço de dados
+$uri_servico_dados = $argv[1];
+// Mensagem para o usuário
+$mensagem = '';
+
+// Verifica se o banco 'notas' existe, usando uma requisição HEAD
+$resp = req_HEAD_banco_notas($uri_servico_dados);
+if ($resp['codigo'] == 404) {
+    # Banco das notas não existe. É preciso criar.
+    $resp = req_PUT_banco_notas($uri_servico_dados);
+
+    // Se não deu certo criar o banco, aborta
+    if ($resp['codigo'] != 201) {
+        echo "Erro ao criar banco de notas.\n";
+        echo "Erro {$resp['codigo']}: {$resp['corpo']}\n";
+        exit(1);
+    }
+}
+
+// Laço principal do programa
+do {
+    $opcao = menu_principal($uri_servico_dados);
+    switch ($opcao) {
+        case OPCAO_CRIAR:
+            menu_criar($uri_servico_dados);
+            break;
+        case OPCAO_APAGAR:
+            menu_apagar($uri_servico_dados);
+            break;
+    }
+}
+while($opcao != OPCAO_SAIR);
