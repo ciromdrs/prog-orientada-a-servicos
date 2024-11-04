@@ -6,11 +6,9 @@ Notas:
 1. Os comandos apresentados neste tutorial são para o terminal Linux.
 Adapte-os ao seu sistema operacional.
 
-1. Até o momento da escrita deste tutorial (set/2023), os laboratórios não
+1. Até o momento da escrita deste tutorial (set/2023, revisado em nov/2024), os laboratórios não
 tinham o driver de cobertura de testes instalado.
 Você pode pular a seção correspondente a este assunto.
-
-1. Seções <mark>destacadas</mark> indicam alterações feitas no tutorial.
 
 ## Preparação
 1. Instale o PHPUnit via Composer:
@@ -25,7 +23,7 @@ Você pode pular a seção correspondente a este assunto.
     ./vendor/bin/phpunit --generate-configuration
     ```
 
-1. No elemento `phpunit`:
+1. Abra o arquivo de configuração `phpunit.xml` que você acabou de criar. No elemento `phpunit`:
     1. adicione `colors="true"` para deixar a saída do PHPUnit mais bonita no terminal;
     1. altere `requireCoverageMetadata` para `"false"` para ignorar alguns warnings por enquanto.
 
@@ -122,9 +120,9 @@ Você pode pular a seção correspondente a este assunto.
         $email = new Email($endereco);
     }
     ```
-    <mark>Perceba que, diferentemente do teste anterior, aqui estamos esperando que o código lance uma exceção (`InvalidArgumentException`).
+    Perceba que, diferentemente do teste anterior, aqui estamos esperando que o código lance uma exceção (`InvalidArgumentException`).
     Para isto, antes de chamar o código que lança a exceção, avisamos ao PHPUnit que estamos esperando esta exceção (usando `$this->expectException`...).
-    Execute os testes novamente.</mark>
+    Execute os testes novamente.
 
 ## DataProviders
 1. Um [DataProvider](https://docs.phpunit.de/en/10.3/attributes.html#data-provider) é uma função que fornece dados para um teste.
@@ -161,12 +159,6 @@ Você pode pular a seção correspondente a este assunto.
 
 
 ## Cobertura de Testes
-<mark>
-    Nota: Até o momento da escrita deste tutorial (set/2023), os laboratórios não
-    tinham o driver de cobertura de testes instalado.
-    Você pode pular esta seção.
-</mark>
-
 1. Execute os testes com um [relatório de cobertura](https://docs.phpunit.de/en/10.3/textui.html#code-coverage).
     ```bash
     ./vendor/bin/phpunit --coverage-text
@@ -187,7 +179,7 @@ Você pode pular a seção correspondente a este assunto.
     final class EmailTest extends TestCase
     ...
     ```
-    Execute os testes com o relaório de cobertura novamente.
+    Execute os testes com o relatório de cobertura novamente.
 
 1. Adicione ao arquivo `phpunit.xml` o relatório de cobertura em HTML.
     ```xml
@@ -200,12 +192,15 @@ Você pode pular a seção correspondente a este assunto.
     Execute os testes e veja o relatório HTML no diretório mencionado na configuração.
 
 ## Exercícios
+Os exercícios abaixo servem para sentirmos na pele como os testes nos ajudam a fazer alterações no código com mais segurança.
+Eles solicitam alterações na forma como a classe `Email` representa e manipula um endereço de e-mail.
+
 1. Adicione os seguintes métodos à classe `Email`:
     1. `getUsuario`: Retorna a parte à esquerda do `"@"` de um endereço.
 
     1. `getDominio`: Retorna a parte à direita do `"@"` de um endereço.
 
-    Crie os testes <mark>`testGetUsuario` e `testGetDominio` na classe `EmailTest`</mark> para verificar a correção desses novos métodos.
+    Crie os testes `testGetUsuario` e `testGetDominio` na classe `EmailTest` para verificar a correção desses novos métodos.
 
 
 1. Atualmente, a função de validação de endereços de e-mail apenas verifica se a string contém um `"@"`.
@@ -219,30 +214,31 @@ Você pode pular a seção correspondente a este assunto.
     | `@dominio.com`             | Sem usuário |
     | `@`                        | Sem usuário nem domínio. |
     
-    1. Crie um DataProvider <mark>`enderecosInvalidosProvider`</mark> de e-mails inválidos com os valores acima.
-
-    1. Altere a função de validação de endereços de e-mail para considerar os novos casos:
+    1. Crie um DataProvider `enderecosInvalidosProvider` de e-mails inválidos com os valores acima na classe `EmailTest`.
+    Execute os testes; eles devem falhar, pois a função `validar` da classe `Email` não lança a exceção esperada nesses casos.
+    
+    1. Altere a função de validação de endereços de e-mail na classe `Email` para detectar os novos casos de e-mails inválidos:
         1. Verifique se o endereço contém um `"@"`.
         1. Verifique se há um usuário à esquerda do `"@"`.
         1. Verifique se há um domínio à direita do `"@"`.
 
-    1. Considere agora as seguintes possibilidades <mark>(adicione-as ao data provider criado no ponto anterior)</mark>:
+    1. Considere agora as seguintes possibilidades (adicione-as ao data provider criado no ponto anterior):
         
         | E-mail nválido | Motivo |
         |-|-|
         | `usuario@dominio`             | Sem extensão de domínio |
         | `usuario@.com`                | Ponto antes da extensão de domínio |
-        | `usu@exemplo.`               | Termina com ponto. |
-        | `dois@arrobas@exemplo.com`   | Dois arrobas no endereço. |
+        | `usu@exemplo.`                | Termina com ponto. |
+        | `dois@arrobas@exemplo.com`    | Dois arrobas no endereço. |
         | `usuario@dominio..com`        | Dois pontos consecutivos no domínio    |
         | `usuario@-dominio.com`        | Hífen no início do domínio             |
         | `usuario@domínio.com-`        | Hífen no final do domínio              |
         | `usuario@domínio!.com`        | Caracteres especiais no domínio        |
 
-        <mark>
-            Neste momento, seu código deve estar falhando nos testes.
-            Isso acontece porque, como podemos ver, validação de e-mail é uma tarefa árdua.
-        </mark>
+        
+        Neste momento, seu código deve estar falhando nos testes.
+        Isso acontece porque, como podemos ver, validação de e-mail é uma tarefa árdua.
+        
         Felizmente, o PHP tem uma função pronta para isso.
         Altere a condição de validação para:
         
@@ -253,5 +249,5 @@ Você pode pular a seção correspondente a este assunto.
 
 1. Substitua o atributo `endereco` da classe `Email` por dois atributos `usuario` e `dominio`.
 Os métodos `getEndereco`, `getUsuario` e `getDominio` devem ser alterados para passar nos testes.
-O construtor da classe `Email` e todos os testes de unidade <mark>na classe `EmailTest`</mark> devem permanecer intactos.
+O construtor da classe `Email` e todos os testes de unidade na classe `EmailTest` devem permanecer intactos.
 
